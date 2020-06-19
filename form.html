@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="form.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+	<script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
+  	<script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-firestore.js"></script>
+
+	<script>
+		// Your web app's Firebase configuration
+		var firebaseConfig = {
+		apiKey: "AIzaSyAVuVzDi0-XzFsQ13OqKn_VC4d6_Imq0sI",
+		authDomain: "indian-shop-84ab4.firebaseapp.com",
+		databaseURL: "https://indian-shop-84ab4.firebaseio.com",
+		projectId: "indian-shop-84ab4",
+		storageBucket: "indian-shop-84ab4.appspot.com",
+		messagingSenderId: "1052530903733",
+		appId: "1:1052530903733:web:89bd4d28a4969f52e58cfc",
+		measurementId: "G-R75ZJLP42F"
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+		const db=firebase.firestore();
+	</script>
+
+	<div class="container"><br>
+		<h1 class="text-success text-center">Add an address so you can get paid</h1>
+		<h5 class="text-center">This will be used as your default business address</h5>
+		<br><br><br>
+		<div class="col-lg-8 m-auto d-block" class="bg-light" class="form_width">
+		<form action="#" onsubmit="return validation()" class="bg-light">
+
+				<div class="form-group">
+					<label id="lbl"><strong>Shop Name:</strong> </label>
+					<input type="text" name="ad" class="form-control" id="shop" placeholder="Enter Your Shop Name" autocomplete="off">
+
+					<span id="Shop_name" class="text-danger font-weight-bold"></span>
+
+				</div>
+
+				<div class="form-group">
+  						<div class="row">
+   							 <div class="col">
+   							 	<label id="lbl"><strong>First Name: </strong></label>
+   							 	<i class="fa fa-check" id="success"></i>
+   							 	<i class="fa fa-times" id="error"></i>
+   							 	
+
+      							<input type="text" class="form-control" id="First_Name" placeholder="Enter First Name" name="Forst name" autocomplete="off">
+
+      							<span id="First" class="text-danger font-weight-bold"> </span>
+   							 </div>
+   							 <div class="col">
+   							 	<label id="lbl"><strong>Last Name: </strong></label>
+     			 				<input type="text" class="form-control" id="Last_Name" placeholder="Enter Last Name" name="Lasts" autocomplete="off">
+
+     			 				<span id="Last" class="text-danger font-weight-bold"></span>
+    						</div>
+  						</div>
+
+				</div>
+				<div class="form-group">
+					<label id="lbl"><strong>Address:</strong> </label>
+					<input type="text" name="ad" class="form-control" id="Address" placeholder="Enter Your Full Address" autocomplete="off">
+
+					<span id="Adrs" class="text-danger font-weight-bold"></span>
+
+				</div>
+				<div class="form-group">
+					<label id="lbl"><strong>Apartment, suite, etc.</strong> </label>
+					<input type="text" name="user" class="form-control" id="Apartment" placeholder="Apartment/suite" autocomplete="off">
+
+					<span id="Apt" class="text-danger font-weight-bold"></span>
+
+				</div>
+				<div class="form-group">
+					<label id="lbl"><strong>City: </strong> </label>
+					<input type="text" name="user" class="form-control" id="City" placeholder="Enter Your City Name" autocomplete="off">
+
+					<span id="Cty" class="text-danger font-weight-bold"></span>
+
+				</div>
+			<div class="row">
+				<div class="col">
+
+					<div class="form-group">
+  						<label for="sel1" id="lbl"><strong>Country/Region:</strong></label>
+  						<select class="form-control" id="sel1">
+    						<option>India</option>
+  						</select>
+					</div>
+				</div>
+				<div class="col">
+
+					<div class="form-group">
+  						<label for="sel2" id="lbl"><strong>State/UT:</strong></label>
+  						<select class="form-control" id="sel2" placeholser="select">
+    						<option>Andaman and Nicobar Islands</option>
+    						<option>Andhra Pradesh</option>
+    						<option>Arunachal Pradesh</option>
+    						<option>Assam</option>
+    						<option>Bihar</option>
+    						<option>Chandigarh</option>
+    						<option>Chhattisgarh</option>
+    						<option>Dadra and Nagar Haveli and Daman and Diu union territory</option>
+    						<option>Delhi</option>
+    						<option>Goa</option>
+    						<option>Gujarat</option>
+    						<option>Haryana</option>
+    						<option>Himachal Pradesh</option>
+    						<option>Jammu and Kashmir </option>
+    						<option>Jharkhand</option>
+    						<option>Karnataka</option>
+    						<option>Kerala</option>
+    						<option>Ladakh </option>
+    						<option>Lakshadweep</option>
+    						<option>Madhya Pradesh</option>
+    						<option>Maharashtra</option>
+    						<option>Manipura</option>
+    						<option>Meghalaya</option>
+    						<option>Mizoram</option>
+    						<option>Nagaland</option>
+    						<option>Odisha</option>
+    						<option>Puducherry</option>
+    						<option>Punjab</option>
+    						<option>Rajasthan</option>
+    						<option>Sikkim</option>
+    						<option>Tamil Nadu</option>
+    						<option>Telangana</option>
+    						<option>Tripura</option>
+    						<option>Uttar Pradesh</option>
+    						<option>Uttarakhand</option>
+    						<option>West Bengal</option>
+
+  						</select>
+					</div>
+				</div>
+
+				<div class="col">
+   					<label id="lbl"><strong>Pin Code: </strong></label>
+      				<input type="text" class="form-control" id="Pin_code" placeholder="Enter Your Pin Code" name="Pin" autocomplete="off"> 
+
+      				<span id="pin" class="text-danger font-weight-bold"></span>
+   				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<div class="form-group">
+					<label id="lbl"><strong>Mobile Number: </strong> </label>
+					<input type="text" name="mobile_no" class="form-control" id="mobile_no" placeholder="Enter Your Mobile Number" autocomplete="off">
+
+					<span id="mobile" class="text-danger font-weight-bold"></span>
+
+					</div>
+				</div>
+				<div class="col">
+					<div class="form-group">
+					<label id="lbl"><strong>Email:</strong> </label>
+					<input type="text" name="website" class="form-control" id="email" placeholder="Enter Your email" autocomplete="off">
+					<span id="Email_id" class="text-danger font-weight-bold"></span>
+
+					</div>
+				</div>
+
+			</div>
+			<div class="form-group form-check">
+    			<label class="form-check-label">
+      			<input class="form-check-input" type="checkbox" id="checkbox" value="check"> This store is a registered business
+   				 </label>
+   				 <span id="ck" class="text-danger font-weight-bold"></span>
+
+ 			 </div>
+			<br>
+ 			 <button type="submit" class="btn btn-primary">Create my New Store</button>
+ 		</form>
+
+		</div>
+		
+	</div>
+
+	<script type="text/javascript">
+		function validation() {
+			var shop = document.getElementById('shop').value;
+
+			var Address = document.getElementById('Address').value;
+			var first = document.getElementById('First_Name').value;
+			var last = document.getElementById('Last_Name').value;
+			var Apartment = document.getElementById('Apartment').value;
+			var City = document.getElementById('City').value;
+			var pin = document.getElementById('Pin_code').value;
+			var mobile = document.getElementById('mobile_no').value;
+			var checkbox = document.getElementById('checkbox').value;
+			var email = document.getElementById('email').value;
+			var a ="";
+
+			if(shop == ""){
+				document.getElementById('Shop_name').innerHTML = "**please fill the shop name";
+				return false;
+			}
+			if(shop!=a){
+				document.getElementById('First').innerHTML = "";
+
+			}
+			if(!isNaN(shop)){
+					document.getElementById('Shop_name').innerHTML = "**only characters are allowed";
+			
+			}
+			if(isNaN(shop)){
+					document.getElementById('Shop_name').innerHTML = "";
+			
+			}
+
+
+			if(first == ""){
+
+				document.getElementById('First').innerHTML = "**please fill the first name";
+				return false;
+			}
+			if(first!=a){
+				document.getElementById('First').innerHTML = "";
+
+			}
+			if(!isNaN(first)){
+					document.getElementById('First').innerHTML = "**only characters are allowed";
+			
+			}
+			if(isNaN(first)){
+					document.getElementById('First').innerHTML = "";
+			
+			}
+			if(last == ""){
+				document.getElementById('Last').innerHTML = "**please fill the last name";
+				return false;
+			}
+			if(last!=a){
+				document.getElementById('Last').innerHTML = "";
+
+			}
+
+			if(!isNaN(last)){
+				document.getElementById('Last').innerHTML = "**only characters are allowed";
+				return false;
+			}
+			if(isNaN(last)){
+				document.getElementById('Last').innerHTML = "";
+				
+			}
+
+			if(Address == "") {
+				document.getElementById('Adrs').innerHTML = "**please fill the valid address";
+				return false;
+			}
+			if(Address!=a){
+				document.getElementById('Adrs').innerHTML = "";
+
+			}
+			if(Apartment == "") {
+				document.getElementById('Apt').innerHTML = "**please fill the appartment/suite";
+				return false;
+			}
+			if(Apartment!=a){
+				document.getElementById('Apt').innerHTML = "";
+
+			}
+			if(City == "") {
+				document.getElementById('Cty').innerHTML = "**please fill the City name";
+				return false;
+			}
+			if(City!=a){
+				document.getElementById('Cty').innerHTML = "";
+
+			}
+			if(!isNaN(City)){
+				document.getElementById('Cty').innerHTML = "**only characters are allowed";
+				return false;
+			}
+
+			if(isNaN(City)){
+				document.getElementById('Cty').innerHTML = "";
+			
+			}
+
+			if(pin == "") {
+				document.getElementById('pin').innerHTML = "**please fill the valid pin code";
+				return false;
+			}
+			if(pin!=a){
+				document.getElementById('pin').innerHTML = "";
+
+			}
+			if(isNaN(pin)){
+				document.getElementById('pin').innerHTML = "**only numbers are allowed";
+				return false;
+			}
+			if(!isNaN(pin)){
+				document.getElementById('pin').innerHTML = "";
+				
+			}
+
+			if(mobile == "") {
+				document.getElementById('mobile').innerHTML = "**please fill the valid mobile Number";
+				return false;
+			}
+
+			if(mobile!=a){
+				document.getElementById('mobile').innerHTML = "";
+
+			}
+			if(isNaN(mobile)){
+				document.getElementById('mobile').innerHTML = "**only numbers are allowed";
+				return false;
+			}
+			if(!isNaN(mobile)){
+				document.getElementById('mobile').innerHTML = "";
+				
+			}
+
+			if(mobile.length !=10){
+				document.getElementById('mobile').innerHTML = "**please fill the 10 digit valid mobile Number";
+				return false;
+			}
+			if(mobile.length ==10){
+				document.getElementById('mobile').innerHTML = "";
+				
+			}
+			if(!this.form.checkbox.checked){
+    			document.getElementById('checkbox').innerHTML = "**you must select";
+				return false;
+			}
+
+			var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+            //var address = document.getElementById[email].value;
+            if (reg.test(email) == false) 
+            {
+                document.getElementById('Email_id').innerHTML = "**Invalid Email Address";
+                return (false);
+            }
+            if (reg.test(email) == true) 
+            {
+                document.getElementById('Email_id').innerHTML = "";
+                
+            }
+		}
+	</script>
+
+	<script src="form.js"></script>
+
+</body>
+</html>

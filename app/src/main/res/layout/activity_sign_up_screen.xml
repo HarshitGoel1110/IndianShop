@@ -53,6 +53,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signUpEmail" />
 
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/signUpProgress"
+        style="@style/SpinKitView.Large.Wave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        app:SpinKit_Color="@color/pinkred"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signUpPassword" />
+
     <Button
         android:id="@+id/signUpButton"
         android:layout_width="wrap_content"
@@ -61,9 +75,9 @@
         android:background="@drawable/welcome_button"
         android:clickable="true"
         android:elevation="40dp"
-        android:paddingLeft="30dp"
+        android:paddingLeft="70dp"
         android:paddingTop="10dp"
-        android:paddingRight="30dp"
+        android:paddingRight="70dp"
         android:paddingBottom="10dp"
         android:text="Sign Up"
         android:textSize="24sp"

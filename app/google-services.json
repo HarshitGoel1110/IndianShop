@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "1052530903733",
+    "firebase_url": "https://indian-shop-84ab4.firebaseio.com",
+    "project_id": "indian-shop-84ab4",
+    "storage_bucket": "indian-shop-84ab4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052530903733:android:ae08a9d1fd7bee6fe58cfc",
+        "android_client_info": {
+          "package_name": "com.example.indianshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052530903733-p43mdqfbuipbl99cbubdnl2g90ku86dk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNAekp8WGNKZA_HYiqwNoEpkHKxQRbGDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052530903733-p43mdqfbuipbl99cbubdnl2g90ku86dk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052530903733:android:7af0bfc7ae0785cde58cfc",
+        "android_client_info": {
+          "package_name": "com.harshit.indianshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052530903733-gjd0ttn9qp1jsthkl9pg3sdeufthjje1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.harshit.indianshop",
+            "certificate_hash": "294c90f9f2bde5b3e32e94106808301ff42337c8"
+          }
+        },
+        {
+          "client_id": "1052530903733-p43mdqfbuipbl99cbubdnl2g90ku86dk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNAekp8WGNKZA_HYiqwNoEpkHKxQRbGDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052530903733-p43mdqfbuipbl99cbubdnl2g90ku86dk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052530903733:android:31e84258b99edb8ee58cfc",
+        "android_client_info": {
+          "package_name": "com.harshit.indianstore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052530903733-p43mdqfbuipbl99cbubdnl2g90ku86dk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNAekp8WGNKZA_HYiqwNoEpkHKxQRbGDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052530903733-p43mdqfbuipbl99cbubdnl2g90ku86dk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

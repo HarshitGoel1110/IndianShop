@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">IndianStore</string>
+    <string-array name="userType">
+        <item>---Select the User Type---</item>
+        <item>Shop Owner</item>
+        <item>Buyers</item>
+    </string-array>
 </resources>

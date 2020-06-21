@@ -2,6 +2,7 @@ package com.harshit.indianstore;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,7 +37,9 @@ public class WelcomeScreen extends AppCompatActivity {
 
     }
     public void login(){
-
+        startActivity(new Intent(WelcomeScreen.this , LoginScreen.class));
     }
-    public void register(){}
+    public void register(){
+        startActivity(new Intent(WelcomeScreen.this , SignUpScreen.class));
+    }
 }

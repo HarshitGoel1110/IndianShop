@@ -28,7 +28,6 @@ const addShop=(store,doc)=>{
     </div>
   </div>
 	`;
-	console.log(doc);
 	
 	// console.log(html);
 	list.innerHTML +=html;

@@ -185,7 +185,6 @@
         </div>
       </div>
 
-
       <script>
         var openmodal = document.querySelectorAll('.modal-open')
         let selectedModalTargetId = ''
@@ -197,8 +196,10 @@
           })
         }
      
-       const overlay = document.querySelector('.modal-overlay');
-       overlay.addEventListener('click', toggleModal);
+       var overlay = document.querySelectorAll('.modal-overlay');
+       for (var i = 0; i < overlay.length; i++) {
+        overlay[i].addEventListener('click', toggleModal);
+      }
      
        var closemodal = document.querySelectorAll('.modal-close')
        for (var i = 0; i < closemodal.length; i++) {

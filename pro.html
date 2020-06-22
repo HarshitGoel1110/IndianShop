@@ -20,6 +20,7 @@
 <body>
 
     <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-firestore.js"></script>
 
     <script>
@@ -37,8 +38,9 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db=firebase.firestore();
-    </script>
+        const auth = firebase.auth();
 
+    </script>
     <div id="header"></div>
 
     <div id="storename" class="flex flex-wrap w-full mb-100 flex-col items-center text-center">

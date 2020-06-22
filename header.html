@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     <title></title>
+    <style>
+      .modal {
+        transition: opacity 0.25s ease;
+      }
+      body.modal-active {
+        overflow-x: hidden;
+        overflow-y: visible !important;
+      }
+    </style>
 </head>
 <body>
 
@@ -19,20 +28,209 @@
           </a>
           
           <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
-            <a href="index.html" class="mr-5 hover:text-gray-900">Home</a>
-            <a href="form.html" class="mr-5 hover:text-gray-900">Create Store</a>
-            <a href="/" class="mr-5 hover:text-gray-900">Stores</a>
-            <a href="/" class="mr-5 hover:text-gray-900">Contact</a>
+            <ul class="flex">
+              <li class="logged-in">
+                <a href="index.html" class="mr-5 hover:text-gray-900">Home</a>
+              </li>
+              <li class="modal-open logged-in">
+                <a href="form.html" class="mr-5 hover:text-gray-900" data-toggle="modal" data-target="modal-account">Account</a>
+              </li>
+              <li class="logged-in">
+                <a href="/" class="mr-5 hover:text-gray-900">Logout</a>
+              </li>
+              <li class="logged-in">
+                <a href="/" class="mr-5 hover:text-gray-900">Create Store</a>
+              </li>
+              <li class="modal-open logged-out">
+                <a href="/" class="mr-5 hover:text-gray-900" data-toggle="modal" data-target="modal-login">Login</a>
+              </li>
+              <li class="modal-open logged-out">
+                <a href="/" class="mr-5 hover:text-gray-900" data-toggle="modal" data-target="modal-signup">SignUp</a>
+              </li>
+            </ul>
           </nav>
-
-          <button class="inline-flex items-center bg-gray-200 border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mt-4 md:mt-0">Sign Up
-            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </button>
-
         </div>
       </header>
+
+      
+      <!--LOGIN Modal-->
+      <div id="modal-login" class="modal opacity-0 z-40 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
+        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+        
+        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+          
+          <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
+            <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+              <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+            </svg>
+          </div>
+
+          <!-- Add margin if you want to see some of the overlay behind the modal-->
+          <div class="modal-content py-4 text-left px-6">
+            <!--Title-->
+            <div class="flex justify-between items-center pb-3">
+              <p class="text-2xl font-bold">Login!</p>
+              <div class="modal-close cursor-pointer z-50">
+                <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                  <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                </svg>
+              </div>
+            </div>
+
+            <!--Body-->
+            <form id="log-in" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <div class="mb-4">
+                  <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                    Username
+                  </label>
+                  <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username">
+                </div>
+                <div class="mb-4">
+                  <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+                    Password
+                  </label>
+                  <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************">
+                </div>
+                <div class="flex items-center justify-between">
+                  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                    Sign In
+                  </button>
+                  <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
+                    Forgot Password?
+                  </a>
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!--SIGNUP Modal-->
+      <div id="modal-signup" class="modal opacity-0 z-40 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
+        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+        
+        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+          
+          <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
+            <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+              <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+            </svg>
+          </div>
+
+          <!-- Add margin if you want to see some of the overlay behind the modal-->
+          <div class="modal-content py-4 text-left px-6">
+            <!--Title-->
+            <div class="flex justify-between items-center pb-3">
+              <p class="text-2xl font-bold">SignUp!</p>
+              <div class="modal-close cursor-pointer z-50">
+                <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                  <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                </svg>
+              </div>
+            </div>
+
+            <!--Body-->
+            <form id="log-in" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <div class="mb-4">
+                  <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                    Email
+                  </label>
+                  <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Email">
+                </div>
+                <div class="mb-4">
+                  <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+                    Password
+                  </label>
+                  <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************">
+                </div>
+                <div class="flex items-center justify-between">
+                  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                    Sign Up
+                  </button>
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+
+      
+      <!--ACCOUNT Modal Modal-->
+      <div id="modal-account" class="modal opacity-0 z-40 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
+        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+        
+        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+          
+          <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
+            <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+              <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+            </svg>
+          </div>
+
+          <!-- Add margin if you want to see some of the overlay behind the modal-->
+          <div class="modal-content py-4 text-left px-6">
+            <!--Title-->
+            <div class="flex justify-between items-center pb-3">
+              <p class="text-2xl font-bold">Account Details</p>
+              <div class="modal-close cursor-pointer z-50">
+                <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                  <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                </svg>
+              </div>
+            </div>
+
+            <!--Body-->
+            <h4>Account details</h4><br>
+          </div>
+        </div>
+      </div>
+
+
+      <script>
+        var openmodal = document.querySelectorAll('.modal-open')
+        let selectedModalTargetId = ''
+        for (var i = 0; i < openmodal.length; i++) {
+          openmodal[i].addEventListener('click', function(event){
+            selectedModalTargetId = event.target.attributes.getNamedItem('data-target').value;
+            event.preventDefault();
+            toggleModal();
+          })
+        }
+     
+       const overlay = document.querySelector('.modal-overlay');
+       overlay.addEventListener('click', toggleModal);
+     
+       var closemodal = document.querySelectorAll('.modal-close')
+       for (var i = 0; i < closemodal.length; i++) {
+         closemodal[i].addEventListener('click', toggleModal);
+       }
+     
+       document.onkeydown = function(evt) {
+         evt = evt || window.event
+         var isEscape = false
+         if ("key" in evt) {
+           isEscape = (evt.key === "Escape" || evt.key === "Esc");
+         } else {
+           isEscape = (evt.keyCode === 27);
+         }
+         if (isEscape && document.body.classList.contains('modal-active')) {
+           toggleModal();
+         }
+       }
+     
+       function toggleModal () {
+         if(!selectedModalTargetId) {
+           return;
+         }
+         const body = document.querySelector('body');
+         const modal = document.getElementById(selectedModalTargetId);
+         modal.classList.toggle('opacity-0');
+         modal.classList.toggle('pointer-events-none');
+         body.classList.toggle('modal-active');
+       }
+     </script>
+
+
 
 </body>
 </html>

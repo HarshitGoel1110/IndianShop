@@ -23,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
     }
 
+    public void checkConnection(){
+
+    }
+
     @Override
     protected void onStart() {
         super.onStart();

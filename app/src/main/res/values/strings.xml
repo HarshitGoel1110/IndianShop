@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">IndianStore</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
     <string-array name="userType">
         <item>---Select the User Type---</item>
         <item>Shop Owner</item>

@@ -11,7 +11,7 @@ auth.onAuthStateChanged(user => {
 const createForm = document.querySelector('#create-form');
 createForm.addEventListener('submit', (e) => {
 e.preventDefault();
-const store = {
+db.collection('shop').add({
   name: createForm['storename'].value,
   firstname: createForm['firstname'].value,
   lastname: createForm['lastname'].value,
@@ -23,8 +23,7 @@ const store = {
   mobile: createForm['mobileno'].value,
   email: createForm['email'].value,
   isreg: createForm['isreg'].value
-}
-db.collection('shop').add(store).then(() => {
+}).then(() => {
   createForm.reset();
 }).catch(err => {
   console.log(err.message);

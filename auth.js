@@ -7,29 +7,6 @@ auth.onAuthStateChanged(user => {
   }
 })
 
-// create new store
-const createForm = document.querySelector('#create-form');
-createForm.addEventListener('submit', (e) => {
-e.preventDefault();
-db.collection('shop').add({
-  name: createForm['storename'].value,
-  firstname: createForm['firstname'].value,
-  lastname: createForm['lastname'].value,
-  address: createForm['address'].value,
-  city: createForm['city'].value,
-  country: createForm['country'].value,
-  state: createForm['state'].value,
-  pincode: createForm['pincode'].value,
-  mobile: createForm['mobileno'].value,
-  email: createForm['email'].value,
-  isreg: createForm['isreg'].value
-}).then(() => {
-  createForm.reset();
-}).catch(err => {
-  console.log(err.message);
-});
-});
-
 // signup
 const signupForm = document.querySelector('#signup-form');
 signupForm.addEventListener('submit', (e) => {

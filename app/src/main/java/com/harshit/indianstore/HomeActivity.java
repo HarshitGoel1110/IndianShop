@@ -40,6 +40,8 @@ public class HomeActivity extends AppCompatActivity {
     FirebaseFirestore db;
     DocumentReference user;
 
+    FragmentManager fragmentManager;
+
     NavigationView navigationView;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -63,33 +65,35 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void selectIemDrawer(MenuItem menuItem){
-        Fragment fragment = null;
-        Class fragmentClass;
 
         switch (menuItem.getItemId()){
             case R.id.drawerHomeShop : {
                 if(hasShop) {
-                    fragmentClass = ViewShop.class;
+                    fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , new ViewShop() , null).addToBackStack(null).commit();
+                    Toast.makeText(HomeActivity.this, "working", Toast.LENGTH_SHORT).show();
                     break;
+//                    fragmentClass = ViewShop.class;
+//                    break;
                 }
                 else{
-                    fragmentClass = CreateNewShop.class;
+                    fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , new CreateNewShop() , null).addToBackStack(null).commit();
+                    Toast.makeText(HomeActivity.this, "working", Toast.LENGTH_SHORT).show();
                     break;
+//                    fragmentClass = CreateNewShop.class;
+//                    break;
                 }
             }
-            default:{
-                fragmentClass = ViewShop.class;
+            case R.id.drawerHomeBuy : {
+                fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , new AllShops() , null).addToBackStack(null).commit();
+                Toast.makeText(HomeActivity.this, "working", Toast.LENGTH_SHORT).show();
                 break;
+//                fragmentClass = AllShops.class;
+//                break;
+            }
+            default:{
+
             }
         }
-        try{
-            fragment = (Fragment) fragmentClass.newInstance();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , fragment).commit();
         menuItem.setChecked(true);
         drawerLayout.closeDrawers();
     }
@@ -141,10 +145,10 @@ public class HomeActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         // for quickly exiting the activity
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+//        Intent intent = new Intent(Intent.ACTION_MAIN);
+//        intent.addCategory(Intent.CATEGORY_HOME);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(intent);
     }
 
     private void logout() {
@@ -177,59 +181,83 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    public void addToFirebase(View v) {
-        TextInputLayout mPrice , mDesc , mName;
-        String name = "" , desc = "" , price = "";
 
-        // these layout is present in addNewItem fragment and its xml class
-        mName = findViewById(R.id.addNewname);
-        mDesc = findViewById(R.id.addNewdesc);
-        mPrice = findViewById(R.id.addNewprice);
+//    public void addToFirebase(View v) {
+//        TextInputLayout mPrice , mDesc , mName;
+//        String name = "" , desc = "" , price = "";
+//
+//        // these layout is present in addNewItem fragment and its xml class
+//        mName = findViewById(R.id.addNewname);
+//        mDesc = findViewById(R.id.addNewdesc);
+//        mPrice = findViewById(R.id.addNewprice);
+//
+//        name = mName.getEditText().getText().toString();
+//        desc = mDesc.getEditText().getText().toString();
+//        price = mPrice.getEditText().getText().toString();
+//
+//        if(name.isEmpty() || desc.isEmpty() || price.isEmpty()){
+//            Toast.makeText(this, "please fill all the entries", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        HashMap<String , Object> m = new HashMap<>();
+//        m.put("name" , name);
+//        m.put("description",  desc);
+//        m.put("price" , price);
+//
+//        db.collection("shop").document(mUser.getUid()).collection("shop_items").add(m)
+//                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentReference> task) {
+//                        Toast.makeText(HomeActivity.this, "added successfully", Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Toast.makeText(HomeActivity.this, "Some error occurred", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//
+//    }
 
-        name = mName.getEditText().getText().toString();
-        desc = mDesc.getEditText().getText().toString();
-        price = mPrice.getEditText().getText().toString();
+//    public void addNew(View v){
+//        Fragment fragment = null;
+//        Class fragmentClass = AddNewItem.class;
+//
+//        try{
+//            fragment = (Fragment) fragmentClass.newInstance();
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , fragment).commit();
+//        Toast.makeText(this, "working", Toast.LENGTH_SHORT).show();
+//    }
 
-        if(name.isEmpty() || desc.isEmpty() || price.isEmpty()){
-            Toast.makeText(this, "please fill all the entries", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    public void init(){
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
 
-        HashMap<String , Object> m = new HashMap<>();
-        m.put("name" , name);
-        m.put("description",  desc);
-        m.put("price" , price);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        db.collection("shop").document(mUser.getUid()).collection("shop_items").add(m)
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        Toast.makeText(HomeActivity.this, "added successfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(HomeActivity.this, "Some error occurred", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        navigationView = findViewById(R.id.homeNavigation);
+        drawerLayout = findViewById(R.id.homeDrawerLayout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this , drawerLayout , R.string.open , R.string.close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , new AllShops() , null).addToBackStack(null).commit();
+        Toast.makeText(HomeActivity.this, "working", Toast.LENGTH_SHORT).show();
 
     }
 
-    public void addNew(View v){
-        Fragment fragment = null;
-        Class fragmentClass = AddNewItem.class;
-
-        try{
-            fragment = (Fragment) fragmentClass.newInstance();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , fragment).commit();
-        Toast.makeText(this, "working", Toast.LENGTH_SHORT).show();
-    }
+    // --------------------------------------------------the last 2 functions are of create new shop fragment class ------------------------------------
 
     public void createNewShop(View v){
         TextInputLayout mName = findViewById(R.id.createNewShopName);
@@ -273,7 +301,6 @@ public class HomeActivity extends AppCompatActivity {
                         Toast.makeText(HomeActivity.this, "Error occurred", Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 
     public void updateField(){
@@ -296,22 +323,6 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
 
-    }
-
-    public void init(){
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
-        db = FirebaseFirestore.getInstance();
-
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        navigationView = findViewById(R.id.homeNavigation);
-        drawerLayout = findViewById(R.id.homeDrawerLayout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this , drawerLayout , R.string.open , R.string.close);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 }

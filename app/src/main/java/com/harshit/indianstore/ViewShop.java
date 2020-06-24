@@ -33,6 +33,7 @@ public class ViewShop extends Fragment {
     FirebaseUser mUser;
 
     FirestoreRecyclerAdapter adapter;
+    FloatingActionButton button;
 
     RecyclerView recyclerView;
 
@@ -102,12 +103,28 @@ public class ViewShop extends Fragment {
         View view = inflater.inflate(R.layout.fragment_view_shop, container, false);
 
         // Inflate the layout for this fragment
+        button = view.findViewById(R.id.viewShopfloatingActionButton);
 
         recyclerView = view.findViewById(R.id.viewShopRecyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addNew();
+            }
+        });
+
         return view;
+    }
+
+
+    public void addNew(){
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , new AddNewItem() , null).addToBackStack(null).commit();
+        Toast.makeText(getContext(), "working", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -115,6 +132,7 @@ public class ViewShop extends Fragment {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
+        Toast.makeText(getContext(), "stopped", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -124,18 +142,18 @@ public class ViewShop extends Fragment {
     }
 
     //the holder class for viewing the products in our shop
-    private class ProductViewHolder extends RecyclerView.ViewHolder {
-
-        TextView listName;
-        TextView listDescription;
-        TextView listPrice;
-
-        public ProductViewHolder(@NonNull View itemView) {
-            super(itemView);
-            listName = itemView.findViewById(R.id.list_item_name);
-            listDescription = itemView.findViewById(R.id.list_item_description);
-            listPrice = itemView.findViewById(R.id.list_item_price);
-        }
-    }
+//    private class ProductViewHolder extends RecyclerView.ViewHolder {
+//
+//        TextView listName;
+//        TextView listDescription;
+//        TextView listPrice;
+//
+//        public ProductViewHolder(@NonNull View itemView) {
+//            super(itemView);
+//            listName = itemView.findViewById(R.id.list_item_name);
+//            listDescription = itemView.findViewById(R.id.list_item_description);
+//            listPrice = itemView.findViewById(R.id.list_item_price);
+//        }
+//    }
 
 }

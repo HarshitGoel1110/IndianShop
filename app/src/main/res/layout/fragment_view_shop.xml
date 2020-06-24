@@ -31,8 +31,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.89"
             app:layout_constraintStart_toStartOf="parent"
-            tools:src="@tools:sample/avatars"
-            android:onClick="addNew"/>
+            tools:src="@tools:sample/avatars"/>
 
         <FrameLayout
             android:id="@+id/frameCheck"

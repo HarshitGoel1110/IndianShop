@@ -45,15 +45,15 @@ db.collection('shop/'+qw+'/product').get().then((snapshot) => {
 
 
 // add new product
-const createForm = document.querySelector('#product-form');
-createForm.addEventListener('submit', (e) => {
+const createprodForm = document.querySelector('#product-form');
+createprodForm.addEventListener('submit', (e) => {
 e.preventDefault();
 db.collection('shop/'+qw+'/product').add({
-  name: createForm['product-name'].value,
-  description: createForm['product-desc'].value,
-  price: createForm['product-price'].value
+  name: createprodForm['product-name'].value,
+  description: createprodForm['product-desc'].value,
+  price: createprodForm['product-price'].value
 }).then(() => {
-  createForm.reset();
+  createprodForm.reset();
 }).catch(err => {
   console.log(err.message);
 });

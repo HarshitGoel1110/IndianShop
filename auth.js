@@ -13,7 +13,7 @@ createForm.addEventListener('submit', (e) => {
 e.preventDefault();
 
 
-db.collection('shop').add({
+db.collection('shop').doc(firebase.auth().currentUser.uid).set({
   name: createForm['storename'].value,
   firstname: createForm['firstname'].value,
   lastname: createForm['lastname'].value,
@@ -25,10 +25,9 @@ db.collection('shop').add({
   mobile: createForm['mobileno'].value,
   email: createForm['email'].value,
   isreg: createForm['isreg'].value
- }).then((shop) => {
-    db.collection('users').doc(auth.W).update({
-    shop:true,
-    shop_id:shop.id
+ }).then(() => {
+    db.collection('users').doc(firebase.auth().currentUser.uid).update({
+    shop:true
     });
   createForm.reset();
 }).catch(err => {

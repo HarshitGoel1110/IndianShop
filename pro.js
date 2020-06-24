@@ -1,27 +1,31 @@
 var url = document.location.href;
-
-const lt=document.getElementById('storename');
-
-
-
+var myParam = location.search.split('name=')[1];
 const list=document.getElementById('displayproducts');
 
-var qw="";
-for(var i=url.length-1;i>=0;i--)
-{   
-    if(url[i]==='=')break;
-    qw=url[i]+qw;
-}
-console.log(qw);
-db.collection('shop').doc(qw).get().then(doc=>{
+const lt=document.getElementById('storename');
+db.collection('shop').doc(myParam).get().then(doc=>{
 	let ht=`<h1 class="sm:text-4xl text-2xl font-medium title-font mb-2 text-gray-900">${doc.data().name}</h1>`;
 	lt.innerHTML += ht;
-}
-)
-const dispProduct=(product,id)=>{
+});
+
+console.log(myParam);
+firebase.auth().onAuthStateChanged( user => {
+  db.collection('shop/'+myParam+'/product').get().then((snapshot) => {
+    snapshot.docs.forEach(doc => {
+        dispProduct(doc.data(),firebase.auth().currentUser.uid);
+    })
+});
+  if (user) {
+    if (myParam == firebase.auth().currentUser.uid)
+    {
+      document.querySelector('#addbtn').style.display = 'block';
+    } 
+  }
+});
+
+const dispProduct=(product,user)=>{
   let html;
-  if (id == firebase.auth().currentUser.uid){
-    document.querySelector('#addbtn').style.display = 'block';
+  if (myParam == user){
     html=`
     <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
         <a class="block relative h-48 rounded overflow-hidden">
@@ -54,27 +58,20 @@ const dispProduct=(product,id)=>{
 	list.innerHTML +=html;
 }
 
-var myParam = location.search.split('name=')[1]
 
-db.collection('shop/'+qw+'/product').get().then((snapshot) => {
-    snapshot.docs.forEach(doc => {
-        dispProduct(doc.data(),myParam);
-    })
-}).catch(err => {
-    console.log(err);
-});
 
 
 // add new product
 const createprodForm = document.querySelector('#product-form');
 createprodForm.addEventListener('submit', (e) => {
 e.preventDefault();
-db.collection('shop/'+qw+'/product').add({
+db.collection('shop/'+myParam+'/product').add({
   name: createprodForm['product-name'].value,
   description: createprodForm['product-desc'].value,
   price: createprodForm['product-price'].value
 }).then(() => {
   createprodForm.reset();
+  location.reload();
 }).catch(err => {
   console.log(err.message);
 });

@@ -1,34 +1,32 @@
 package com.harshit.indianstore;
 
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class ShopView extends AppCompatActivity {
+public class ViewShop extends Fragment {
 
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth mAuth;
@@ -36,22 +34,38 @@ public class ShopView extends AppCompatActivity {
 
     FirestoreRecyclerAdapter adapter;
 
-    Toolbar toolbar;
     RecyclerView recyclerView;
 
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    private String mParam1;
+    private String mParam2;
+
+    public ViewShop() {
+        // Required empty public constructor
+    }
+
+    public static ViewShop newInstance(String param1, String param2) {
+        ViewShop fragment = new ViewShop();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shop_view);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
-
-        toolbar = findViewById(R.id.viewShopToolbar);
-        setSupportActionBar(toolbar);
-
-        recyclerView = findViewById(R.id.viewShopRecyclerView);
 
         //Query
         Query query = firebaseFirestore.collection("shop")
@@ -78,43 +92,38 @@ public class ShopView extends AppCompatActivity {
             }
         };
 
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_view_shop, container, false);
+
+        // Inflate the layout for this fragment
+
+        recyclerView = view.findViewById(R.id.viewShopRecyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        return view;
     }
 
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.viewShopAddNew:{
-                startActivity(new Intent(ShopView.this , AddNewProduct.class));
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         adapter.stopListening();
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         adapter.startListening();
-
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.view_shop_items , menu);
-        return true;
-
-    }
-
+    //the holder class for viewing the products in our shop
     private class ProductViewHolder extends RecyclerView.ViewHolder {
 
         TextView listName;

@@ -1,6 +1,9 @@
 package com.harshit.indianstore;
 
 class ProductsModel {
+
+    //for displaying the products this can be used by shop owners and customers as well
+    
     String description;
     String name;
     String price;

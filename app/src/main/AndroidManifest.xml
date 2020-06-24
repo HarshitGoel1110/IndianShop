@@ -13,8 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddNewProduct"></activity>
-        <activity android:name=".ShopView" />
+        <activity android:name=".SimpleAllUserDetails"></activity>
+        <activity android:name=".AddNewProduct" />
+        <activity android:name=".waste.ShopView" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".OtpScreen" />
         <activity android:name=".SignUpScreen" />

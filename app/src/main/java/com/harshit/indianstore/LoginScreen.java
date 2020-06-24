@@ -14,10 +14,15 @@ import android.widget.Toast;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.Wave;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginScreen extends AppCompatActivity {
 
@@ -62,13 +67,10 @@ public class LoginScreen extends AppCompatActivity {
                             if(mAuth.getCurrentUser().isEmailVerified()){
 //                                setEnable();
                                 Toast.makeText(LoginScreen.this, "Sign in successfully", Toast.LENGTH_SHORT).show();
-
+                                //checking for first time loging or not
+                                checkFirstTime();
                                 // go to login screen
-                                Intent intent = new Intent(LoginScreen.this , HomeActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();
+
                             }
                             else {
                                 setEnable();
@@ -85,6 +87,39 @@ public class LoginScreen extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void checkFirstTime() {
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        FirebaseUser mUser = mAuth.getCurrentUser();
+
+        firebaseFirestore.collection("shop").document(mUser.getUid()).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if(documentSnapshot.exists()){
+                            Intent intent = new Intent(LoginScreen.this , HomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else{
+                            // for the first time
+                            Intent intent = new Intent(LoginScreen.this , SimpleAllUserDetails.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(LoginScreen.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void setEnable(){

@@ -5,6 +5,17 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
+    <FrameLayout
+        android:id="@+id/homeFragmentAddNew"
+        android:layout_width="356dp"
+        android:layout_height="505dp"
+        android:elevation="10dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/homeDrawerLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -16,13 +27,21 @@
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/homeDrawerLayout"
-        android:layout_width="407dp"
-        android:layout_height="668dp"
+        android:layout_width="413dp"
+        android:layout_height="666dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:context=".HomeActivity">
+
+        <FrameLayout
+            android:id="@+id/homeActivityFrame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        </FrameLayout>
+
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/homeNavigation"
@@ -37,19 +56,8 @@
 
         </com.google.android.material.navigation.NavigationView>
 
-        <Button
-            android:id="@+id/homeLogout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

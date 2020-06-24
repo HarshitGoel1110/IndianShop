@@ -11,6 +11,8 @@ auth.onAuthStateChanged(user => {
 const createForm = document.querySelector('#create-form');
 createForm.addEventListener('submit', (e) => {
 e.preventDefault();
+
+
 db.collection('shop').add({
   name: createForm['storename'].value,
   firstname: createForm['firstname'].value,
@@ -23,7 +25,11 @@ db.collection('shop').add({
   mobile: createForm['mobileno'].value,
   email: createForm['email'].value,
   isreg: createForm['isreg'].value
-}).then(() => {
+ }).then((shop) => {
+    db.collection('users').doc(auth.W).update({
+    shop:true,
+    shop_id:shop.id
+    });
   createForm.reset();
 }).catch(err => {
   console.log(err.message);
@@ -43,7 +49,8 @@ signupForm.addEventListener('submit', (e) => {
   auth.createUserWithEmailAndPassword(email, password).then(cred => {
     return db.collection('users').doc(cred.user.uid).set({
       name: signupForm['signup-name'].value,
-      mobileno: signupForm['signup-mobileno'].value
+      mobileno: signupForm['signup-mobileno'].value,
+      shop: false
     });
   }).then(() => {
     // close the signup modal & reset form

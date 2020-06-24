@@ -18,14 +18,14 @@ db.collection('shop').doc(qw).get().then(doc=>{
 	lt.innerHTML += ht;
 }
 )
-const addProduct=(product)=>{
+const dispProduct=(product)=>{
 	let html=`
     <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
         <a class="block relative h-48 rounded overflow-hidden">
         <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://dummyimage.com/428x268">
         </a>
         <div class="mt-4">
-        <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
+        <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">${product.description}</h3>
         <h2 class="text-gray-900 title-font text-lg font-medium">${product.name}</h2>
         <p class="mt-1">₹ ${product.price}</p>
         <button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Add to Cart</button>
@@ -37,10 +37,24 @@ const addProduct=(product)=>{
 
 db.collection('shop/'+qw+'/product').get().then((snapshot) => {
     snapshot.docs.forEach(doc => {
-        addProduct(doc.data());
+        dispProduct(doc.data());
     })
 }).catch(err => {
     console.log(err);
 });
 
-console.log("rit");
+
+// add new product
+const createForm = document.querySelector('#product-form');
+createForm.addEventListener('submit', (e) => {
+e.preventDefault();
+db.collection('shop/'+qw+'/product').add({
+  name: createForm['product-name'].value,
+  description: createForm['product-desc'].value,
+  price: createForm['product-price'].value
+}).then(() => {
+  createForm.reset();
+}).catch(err => {
+  console.log(err.message);
+});
+});

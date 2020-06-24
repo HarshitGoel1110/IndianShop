@@ -15,16 +15,11 @@ e.preventDefault();
 
 db.collection('shop').doc(firebase.auth().currentUser.uid).set({
   name: createForm['storename'].value,
-  firstname: createForm['firstname'].value,
-  lastname: createForm['lastname'].value,
   address: createForm['address'].value,
   city: createForm['city'].value,
-  country: createForm['country'].value,
-  state: createForm['state'].value,
   pincode: createForm['pincode'].value,
   mobile: createForm['mobileno'].value,
-  email: createForm['email'].value,
-  isreg: createForm['isreg'].value
+  email: createForm['email'].value
  }).then(() => {
     db.collection('users').doc(firebase.auth().currentUser.uid).update({
     shop:true

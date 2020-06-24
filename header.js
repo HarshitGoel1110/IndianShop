@@ -28,6 +28,7 @@ const setupUI = (user) => {
         {
             create.style.display='none';
             view.style.display='block';
+            document.getElementById("qwe").href = `pro.html?name=${user.uid}`;
         }
     });
     loggedInLinks.forEach(item => item.style.display = 'block');
@@ -42,4 +43,3 @@ const setupUI = (user) => {
     loggedOutLinks.forEach(item => item.style.display = 'block');
   }
 };
-  

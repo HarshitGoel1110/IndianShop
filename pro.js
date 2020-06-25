@@ -35,6 +35,7 @@ const dispProduct=(product,user)=>{
         <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">${product.description}</h3>
         <h2 class="text-gray-900 title-font text-lg font-medium">${product.name}</h2>
         <p class="mt-1">₹ ${product.price}</p>
+        <button class="inline-flex text-gray-700 bg-gray-200 border-0 py-2 px-6 focus:outline-none hover:bg-gray-300 rounded text-lg">View</button>
         </div>
     </div>
 	`;
@@ -49,7 +50,10 @@ const dispProduct=(product,user)=>{
         <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">${product.description}</h3>
         <h2 class="text-gray-900 title-font text-lg font-medium">${product.name}</h2>
         <p class="mt-1">₹ ${product.price}</p>
-        <button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Add to Cart</button>
+        <div class="flex justify-center">
+          <button class="inline-flex text-gray-700 bg-gray-200 border-0 py-2 px-6 focus:outline-none hover:bg-gray-300 rounded text-lg">View</button>
+          <button class="ml-4 inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Add to Cart</button>
+        </div>
         </div>
     </div>
 	`;

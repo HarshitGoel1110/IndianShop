@@ -14,8 +14,8 @@
         android:title="My shop"/>
 
     <item
-        android:id="@+id/setting"
-        android:title="Setting" />
+        android:id="@+id/drawerHomeMyCart"
+        android:title="My Cart" />
 
 
 </menu>

@@ -70,14 +70,14 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.drawerHomeShop : {
                 if(hasShop) {
                     fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , new ViewShop() , null).addToBackStack(null).commit();
-                    Toast.makeText(HomeActivity.this, "working", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(HomeActivity.this, "working", Toast.LENGTH_SHORT).show();
                     break;
 //                    fragmentClass = ViewShop.class;
 //                    break;
                 }
                 else{
                     fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , new CreateNewShop() , null).addToBackStack(null).commit();
-                    Toast.makeText(HomeActivity.this, "working", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(HomeActivity.this, "working", Toast.LENGTH_SHORT).show();
                     break;
 //                    fragmentClass = CreateNewShop.class;
 //                    break;
@@ -85,10 +85,14 @@ public class HomeActivity extends AppCompatActivity {
             }
             case R.id.drawerHomeBuy : {
                 fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , new AllShops() , null).addToBackStack(null).commit();
-                Toast.makeText(HomeActivity.this, "working", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(HomeActivity.this, "working", Toast.LENGTH_SHORT).show();
                 break;
 //                fragmentClass = AllShops.class;
 //                break;
+            }
+            case R.id.drawerHomeMyCart : {
+                fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , new MyCartView() , null).addToBackStack(null).commit();
+                break;
             }
             default:{
 
@@ -181,60 +185,6 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-
-//    public void addToFirebase(View v) {
-//        TextInputLayout mPrice , mDesc , mName;
-//        String name = "" , desc = "" , price = "";
-//
-//        // these layout is present in addNewItem fragment and its xml class
-//        mName = findViewById(R.id.addNewname);
-//        mDesc = findViewById(R.id.addNewdesc);
-//        mPrice = findViewById(R.id.addNewprice);
-//
-//        name = mName.getEditText().getText().toString();
-//        desc = mDesc.getEditText().getText().toString();
-//        price = mPrice.getEditText().getText().toString();
-//
-//        if(name.isEmpty() || desc.isEmpty() || price.isEmpty()){
-//            Toast.makeText(this, "please fill all the entries", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        HashMap<String , Object> m = new HashMap<>();
-//        m.put("name" , name);
-//        m.put("description",  desc);
-//        m.put("price" , price);
-//
-//        db.collection("shop").document(mUser.getUid()).collection("shop_items").add(m)
-//                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<DocumentReference> task) {
-//                        Toast.makeText(HomeActivity.this, "added successfully", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(HomeActivity.this, "Some error occurred", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//
-//    }
-
-//    public void addNew(View v){
-//        Fragment fragment = null;
-//        Class fragmentClass = AddNewItem.class;
-//
-//        try{
-//            fragment = (Fragment) fragmentClass.newInstance();
-//        }
-//        catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , fragment).commit();
-//        Toast.makeText(this, "working", Toast.LENGTH_SHORT).show();
-//    }
 
     public void init(){
         mAuth = FirebaseAuth.getInstance();

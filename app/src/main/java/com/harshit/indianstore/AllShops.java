@@ -20,17 +20,18 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class AllShops extends Fragment {
+public class AllShops extends Fragment implements AllShopFirestoreAdapter.OnListItemClick {
 
     FirebaseAuth mAuth;
     FirebaseUser mUser;
     FirebaseFirestore firebaseFirestore;
 
     RecyclerView recyclerView;
-    FirestoreRecyclerAdapter adapter;
+    AllShopFirestoreAdapter adapter;
 
     FragmentManager fragmentManager;
 
@@ -75,35 +76,8 @@ public class AllShops extends Fragment {
                 .setQuery(query , AllShopsModel.class)
                 .build();
 
-        adapter = new FirestoreRecyclerAdapter<AllShopsModel, AllShopViewHolder>(options) {
-            @Override
-            public AllShopViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.all_shop_list_item , parent , false);
-                return new AllShopViewHolder(view);
-            }
+        adapter = new AllShopFirestoreAdapter(options , this);
 
-            @Override
-            protected void onBindViewHolder(@NonNull AllShopViewHolder holder, int position, @NonNull AllShopsModel model) {
-                holder.mName.setText(model.getName());
-                holder.mAddress.setText(model.getAddress());
-//                holder.listName.setText(model.getName());
-//                holder.listDescription.setText(model.getDescription());
-//                holder.listPrice.setText(model.getPrice());
-            }
-        };
-
-    }
-
-    private class AllShopViewHolder extends RecyclerView.ViewHolder{
-
-        TextView mName;
-        TextView mAddress;
-
-        public AllShopViewHolder(@NonNull View itemView) {
-            super(itemView);
-            mName = itemView.findViewById(R.id.allShopListName);
-            mAddress = itemView.findViewById(R.id.allShopListAddress);
-        }
     }
 
     @Override
@@ -115,7 +89,9 @@ public class AllShops extends Fragment {
         recyclerView = view.findViewById(R.id.allShopsRecyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+//        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         return view;
     }
@@ -138,6 +114,19 @@ public class AllShops extends Fragment {
         super.onDestroy();
         fragmentManager = getFragmentManager();
         fragmentManager.popBackStack(null , FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        DatabaseHelper db = new DatabaseHelper(getContext());
         System.exit(0);
+    }
+
+    @Override
+    public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+        Toast.makeText(getContext(), documentSnapshot.getId(), Toast.LENGTH_SHORT).show();
+        fragmentManager = getFragmentManager();
+        Bundle bundle = new Bundle();
+        bundle.putString("shop uid" , documentSnapshot.getId());
+        DisplayProductToUser displayProductToUser = new DisplayProductToUser();
+        displayProductToUser.setArguments(bundle);
+        fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , displayProductToUser , null).addToBackStack(null).commit();
+        Toast.makeText(getContext(), "working", Toast.LENGTH_SHORT).show();
     }
 }

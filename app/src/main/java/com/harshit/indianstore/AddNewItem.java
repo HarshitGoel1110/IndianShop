@@ -110,7 +110,7 @@ public class AddNewItem extends Fragment {
         m.put("description",  desc);
         m.put("price" , price);
 
-        firebaseFirestore.collection("shop").document(mUser.getUid()).collection("shop_items").add(m)
+        firebaseFirestore.collection("shop").document(mUser.getUid()).collection("product").add(m)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {

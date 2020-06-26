@@ -2,20 +2,15 @@ package com.harshit.indianstore;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -27,16 +22,18 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class ViewShop extends Fragment implements AllProductFirestoreAdapter.OnListItemClick {
+public class DisplayProductToUser extends Fragment implements AllProductFirestoreAdapter.OnListItemClick {
 
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
 
     FirestoreRecyclerAdapter adapter;
-    FloatingActionButton button;
 
     RecyclerView recyclerView;
+
+
+    String shopId = "";
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -44,12 +41,12 @@ public class ViewShop extends Fragment implements AllProductFirestoreAdapter.OnL
     private String mParam1;
     private String mParam2;
 
-    public ViewShop() {
+    public DisplayProductToUser() {
         // Required empty public constructor
     }
 
-    public static ViewShop newInstance(String param1, String param2) {
-        ViewShop fragment = new ViewShop();
+    public static DisplayProductToUser newInstance(String param1, String param2) {
+        DisplayProductToUser fragment = new DisplayProductToUser();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,13 +62,25 @@ public class ViewShop extends Fragment implements AllProductFirestoreAdapter.OnL
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+
+        View view = inflater.inflate(R.layout.fragment_display_product_to_user, container, false);
+
         firebaseFirestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
 
+        Bundle bundle = this.getArguments();
+        shopId = bundle.getString("shop uid");
+
         //Query
         Query query = firebaseFirestore.collection("shop")
-                .document(mUser.getUid()).collection("product");
+                .document(shopId).collection("product");
 
 
 //        recycler Options
@@ -81,40 +90,14 @@ public class ViewShop extends Fragment implements AllProductFirestoreAdapter.OnL
 
         adapter = new AllProductFirestoreAdapter(options , this);
 
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_view_shop, container, false);
-
-        // Inflate the layout for this fragment
-        button = view.findViewById(R.id.viewShopfloatingActionButton);
-
-        recyclerView = view.findViewById(R.id.viewShopRecyclerView);
+        recyclerView = view.findViewById(R.id.displayToUserRecyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addNew();
-            }
-        });
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext() , 2);
+        recyclerView.setLayoutManager(gridLayoutManager);
 
         return view;
     }
-
-
-    public void addNew(){
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , new AddNewItem() , null).addToBackStack(null).commit();
-        Toast.makeText(getContext(), "working", Toast.LENGTH_SHORT).show();
-    }
-
 
     @Override
     public void onStop() {
@@ -131,22 +114,20 @@ public class ViewShop extends Fragment implements AllProductFirestoreAdapter.OnL
 
     @Override
     public void onItemClick(DocumentSnapshot snapshot, int position) {
+        Toast.makeText(getContext(), "selected", Toast.LENGTH_SHORT).show();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("shopId" , shopId);
+        bundle.putString("productId" , snapshot.getId());
+        bundle.putString("desc" , snapshot.getString("description"));
+        bundle.putString("name" , snapshot.getString("name"));
+        bundle.putInt("price" , Integer.parseInt(snapshot.getString("price")));
+
+        DisplayProductLast displayProductLast = new DisplayProductLast();
+        displayProductLast.setArguments(bundle);
+
+        getFragmentManager().beginTransaction().replace(R.id.homeActivityFrame , displayProductLast , null).addToBackStack(null).commit();
+
 
     }
-
-    //the holder class for viewing the products in our shop
-//    private class ProductViewHolder extends RecyclerView.ViewHolder {
-//
-//        TextView listName;
-//        TextView listDescription;
-//        TextView listPrice;
-//
-//        public ProductViewHolder(@NonNull View itemView) {
-//            super(itemView);
-//            listName = itemView.findViewById(R.id.list_item_name);
-//            listDescription = itemView.findViewById(R.id.list_item_description);
-//            listPrice = itemView.findViewById(R.id.list_item_price);
-//        }
-//    }
-
 }

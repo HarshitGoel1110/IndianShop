@@ -65,13 +65,15 @@ public class MyCartView extends Fragment {
 
     private void display() {
 
+        String a = "";
+
         Cursor cursor = db.getAllData();
         if(cursor.getCount() == 0){
             Toast.makeText(getContext(), "Your cart is empty...", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         HashMap<String , HashMap<String , Combine>> data = new HashMap<>();
@@ -92,16 +94,15 @@ public class MyCartView extends Fragment {
                 data.get(shopId).put(productId , new Combine(name , price , quantity));
             }
 
+            a = a + cursor.getString(3) + " " + cursor.getString(1) + "\n";
+
+
         }
 
         RecyclerOuterCartAdapter adapter = new RecyclerOuterCartAdapter(getContext() , data);
         recyclerView.setAdapter(adapter);
 
-//        String a = "";
-//        while(cursor.moveToNext()){
-//            a = a + cursor.getString(3) + " " + cursor.getString(4) + "\n";
-//        }
-//        Toast.makeText(getContext(), a, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), a, Toast.LENGTH_LONG).show();
 
     }
 

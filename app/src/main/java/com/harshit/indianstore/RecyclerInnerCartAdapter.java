@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -61,6 +62,7 @@ class RecyclerInnerCartAdapter extends RecyclerView.Adapter<RecyclerInnerCartAda
         TextView productName;
         TextView price;
         EditText quantity;
+        Button delete;
 
         public CartInnerViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,6 +71,7 @@ class RecyclerInnerCartAdapter extends RecyclerView.Adapter<RecyclerInnerCartAda
             productName = itemView.findViewById(R.id.cartInnerProductName);
             price = itemView.findViewById(R.id.cartInnerPrice);
             quantity = itemView.findViewById(R.id.cartInnerQuantity);
+            delete = itemView.findViewById(R.id.cartInnerDelete);
 
             quantity.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -93,14 +96,35 @@ class RecyclerInnerCartAdapter extends RecyclerView.Adapter<RecyclerInnerCartAda
                 }
             });
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(context, "inner clicked", Toast.LENGTH_SHORT).show();
-//                    updateValues(getAdapterPosition());
+                    deleteIt(getAdapterPosition());
                 }
             });
 
+        }
+
+        private void deleteIt(int position) {
+            int count = 0;
+            DatabaseHelper db = new DatabaseHelper(context);
+//            notifyItemRangeChanged(0 , innerData.size()-1);
+            for(String i:innerData.keySet()){
+                if(count == position){
+                    if(db.deleteRow(i)) {
+                        innerData.remove(i);
+                        notifyItemRemoved(position);
+                        notifyDataSetChanged();
+                    }
+                    else{
+                        Toast.makeText(context, "Some Error occurred while deleting", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    break;
+                }
+                count++;
+            }
+            Toast.makeText(context, "Item removed Successfully", Toast.LENGTH_SHORT).show();
         }
 
         private void updateValues(int position, int value) {

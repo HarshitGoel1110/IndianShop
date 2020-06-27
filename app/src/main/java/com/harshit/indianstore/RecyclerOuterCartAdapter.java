@@ -3,6 +3,7 @@ package com.harshit.indianstore;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 
 class RecyclerOuterCartAdapter extends RecyclerView.Adapter<RecyclerOuterCartAdapter.CartOuterViewHolder> {
 
@@ -77,7 +79,7 @@ class RecyclerOuterCartAdapter extends RecyclerView.Adapter<RecyclerOuterCartAda
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
             outerRecyclerView.setLayoutManager(linearLayoutManager);
-            outerRecyclerView.setHasFixedSize(true);
+            outerRecyclerView.setHasFixedSize(false);
 
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -111,25 +113,21 @@ class RecyclerOuterCartAdapter extends RecyclerView.Adapter<RecyclerOuterCartAda
 
         }
 
-        public void sendMail(String email , String body){
-            String[] TO = {email};
-            String[] CC = {""};
-            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        public void sendMail(String toEmail , String body){
+            Hashtable<String , String> hashtable = new Hashtable<>();
+            hashtable.put("from" , "indishop.original@gmail.com");
+            hashtable.put("to" , toEmail);
+            hashtable.put("subject" , "Order Details");
+            hashtable.put("text" , body);
 
-            emailIntent.setData(Uri.parse(email));
-            emailIntent.setType("text/plain");
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
-            emailIntent.putExtra(Intent.EXTRA_CC, CC);
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Place Order");
-            emailIntent.putExtra(Intent.EXTRA_TEXT, body);
+            new SendGridAsyncTask(new SendGridAsyncTask.AsynResponse() {
+                @Override
+                public void processFinish(Boolean output) {
+                    // you can go here
+                    Toast.makeText(context, "Order Placed successfully", Toast.LENGTH_LONG).show();
+                }
+            }).execute(hashtable);
 
-            try {
-                context.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-//                context.finish();
-//                Log.i("Finished sending email...", "");
-            } catch (android.content.ActivityNotFoundException ex) {
-                Toast.makeText(context, "There is no email client installed.", Toast.LENGTH_SHORT).show();
-            }
         }
 
         private String generateString(int position) {

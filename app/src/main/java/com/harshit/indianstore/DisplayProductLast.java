@@ -64,19 +64,19 @@ public class DisplayProductLast extends Fragment {
 
         Button button = view.findViewById(R.id.displayLastButton);
 
-//        if(databaseHelper.isPresentAlready(productId)){
-//            button.setEnabled(false);
-//            Toast.makeText(getContext(), "Already present in your cart...", Toast.LENGTH_LONG).show();
-//        }
-//
-//        else{
+        if(databaseHelper.isPresentAlready(productId)){
+            button.setEnabled(false);
+            Toast.makeText(getContext(), "Already present in your cart...", Toast.LENGTH_LONG).show();
+        }
+
+        else{
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     addToCart();
                 }
             });
-//        }
+        }
 
         return view;
     }
@@ -85,10 +85,10 @@ public class DisplayProductLast extends Fragment {
         boolean isInserted = databaseHelper.insertData(productId , shopId ,
                 name , price);
         if(isInserted){
-            Toast.makeText(getContext(), "inserted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Added Successfully \n You can adjust the quantity directly from the cart", Toast.LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(getContext(), "insertion fails", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Unable to add to cart...", Toast.LENGTH_SHORT).show();
         }
     }
 }

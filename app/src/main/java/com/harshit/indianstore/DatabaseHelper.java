@@ -62,14 +62,22 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean isPresentAlready(String pId){
         SQLiteDatabase db = this.getWritableDatabase();
-        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " WHERE " + PRODUCT_ID + " = " + pId;
+//        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " WHERE " + PRODUCT_ID + " = " + pId;
 
-        Log.d("select Query" , selectQuery);
+//        Log.d("select Query" , selectQuery);
 
-        Cursor c = db.rawQuery(selectQuery, null);
-        if(c == null)
+        Cursor findEntry = db.query("ourCart", new String[] {PRODUCT_NAME}, "productId=?", new String[] { pId }, null, null, null);
+
+        if(findEntry.getCount() == 0)
             return false;
         return true;
     }
 
+    public boolean deleteRow(String productId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(TABLE_NAME, PRODUCT_ID + "=?", new String[]{productId});
+        if(result > 0)
+            return true;
+        return false;
+    }
 }

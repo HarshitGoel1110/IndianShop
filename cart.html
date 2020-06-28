@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>Cart</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <style>
+        .qt, .qt-plus, .qt-minus {
+	display: block;
+	float: left;
+}
+
+.qt {
+	font-size: 19px;
+	line-height: 50px;
+	width: 70px;
+	text-align: center;
+}
+
+.qt-plus, .qt-minus {
+	background: #fcfcfc;
+	border: none;
+	font-size: 30px;
+	font-weight: 300;
+	height: 100%;
+	padding: 0 20px;
+	-webkit-transition: background .2s linear;
+	-moz-transition: background .2s linear;
+	-ms-transition: background .2s linear;
+	-o-transition: background .2s linear;
+	transition: background .2s linear;
+}
+
+.qt-plus:hover, .qt-minus:hover {
+	background: #53b5aa;
+	color: #fff;
+	cursor: pointer;
+}
+
+.qt-plus {
+	line-height: 50px;
+}
+
+.qt-minus {
+	line-height: 47px;
+}
+
+        input[type="number"] {
+          -webkit-appearance: textfield;
+            -moz-appearance: textfield;
+                  appearance: textfield;
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+        }
+        .number-input {
+          margin: 3rem;
+        }
+        .number-input button {
+          -webkit-appearance: none;
+          background-color: transparent;
+          border: none;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          margin: 0;
+          position: relative;
+        }
+        .number-input button:before,
+        .number-input button:after {
+          display: inline-block;
+          position: absolute;
+          content: '';
+          height: 2px;
+          transform: translate(-50%, -50%);
+        }
+        .number-input button.plus:after {
+          transform: translate(-50%, -50%) rotate(90deg);
+        }
+        .number-input input[type=number] {
+          text-align: center;
+        }
+
+
+        .md-number-input.number-input {
+          border: 2px solid #ddd;
+          width: 11.8rem;
+        }
+        .md-number-input.number-input button {
+          outline: none;
+          width: 3rem;
+          height: 2rem;
+          padding-top: .8rem;
+        }
+        .md-number-input.number-input button.minus {
+          padding-left: 8px;
+        }
+        .md-number-input.number-input button.plus {
+          padding-left: 2px;
+        }
+        .md-number-input.number-input button:before,
+        .md-number-input.number-input button:after {
+          width: 1rem;
+          background-color: #212121;
+        }
+        .md-number-input.number-input input[type=number] {
+          max-width: 5rem;
+          padding: .5rem;
+          border: solid #ddd;
+          border-width: 0 2px;
+          font-size: 2rem;
+          height: 3rem;
+          font-weight: bold;
+          outline: none;
+        }
+        @media not all and (min-resolution:.001dpcm)
+        { @supports (-webkit-appearance:none) and (stroke-color:transparent) {
+          .number-input.md-number-input.safari_only button:before,
+          .number-input.md-number-input.safari_only button:after {
+            margin-top: -.6rem;
+          }
+        }}
+       .container {
+        padding: 2rem 0rem;
+        }
+
+        .table-image {
+
+            thead {
+                td, th {
+                border: 0;
+                color: #666;
+                font-size: 0.8rem;
+                }
+        }
+
+        td, th {
+            vertical-align: middle;
+            text-align: center;
+
+            &.qty {
+            max-width: 2rem;
+            }
+        }
+        }
+
+        .price {
+        margin-left: 1rem;
+        }
+
+        .modal-footer {
+        padding-top: 0rem;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-firestore.js"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyAVuVzDi0-XzFsQ13OqKn_VC4d6_Imq0sI",
+      authDomain: "indian-shop-84ab4.firebaseapp.com",
+      databaseURL: "https://indian-shop-84ab4.firebaseio.com",
+      projectId: "indian-shop-84ab4",
+      storageBucket: "indian-shop-84ab4.appspot.com",
+      messagingSenderId: "1052530903733",
+      appId: "1:1052530903733:web:89bd4d28a4969f52e58cfc",
+      measurementId: "G-R75ZJLP42F"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db=firebase.firestore();
+    const auth = firebase.auth();
+
+  </script>
+     <div class="modal-content">
+
+            <div class="modal-body cart_head cart_item">
+
+
+
+            </div>
+    </div>
+    <script src="cart.js"></script>
+    <script src="cart2.js"></script>
+</body>
+</html>

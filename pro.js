@@ -1,6 +1,10 @@
+
+
 var url = document.location.href;
 var myParam = location.search.split('name=')[1];
 const list=document.getElementById('displayproducts');
+
+
 
 const lt=document.getElementById('storename');
 db.collection('shop').doc(myParam).get().then(doc=>{
@@ -12,7 +16,7 @@ console.log(myParam);
 firebase.auth().onAuthStateChanged( user => {
   db.collection('shop/'+myParam+'/product').get().then((snapshot) => {
     snapshot.docs.forEach(doc => {
-        dispProduct(doc.data(),firebase.auth().currentUser.uid);
+        dispProduct(doc.data(),firebase.auth().currentUser.uid,doc.id);
     })
 });
   if (user) {
@@ -23,7 +27,7 @@ firebase.auth().onAuthStateChanged( user => {
   }
 });
 
-const dispProduct=(product,user)=>{
+const dispProduct=(product,user,idpro)=>{
   let html;
   if (myParam == user){
     html=`
@@ -35,7 +39,6 @@ const dispProduct=(product,user)=>{
         <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">${product.description}</h3>
         <h2 class="text-gray-900 title-font text-lg font-medium">${product.name}</h2>
         <p class="mt-1">₹ ${product.price}</p>
-        <button class="inline-flex text-gray-700 bg-gray-200 border-0 py-2 px-6 focus:outline-none hover:bg-gray-300 rounded text-lg">View</button>
         </div>
     </div>
 	`;
@@ -47,19 +50,55 @@ const dispProduct=(product,user)=>{
         <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://dummyimage.com/428x268">
         </a>
         <div class="mt-4">
+
         <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">${product.description}</h3>
         <h2 class="text-gray-900 title-font text-lg font-medium">${product.name}</h2>
-        <p class="mt-1">₹ ${product.price}</p>
-        <div class="flex justify-center">
-          <button class="inline-flex text-gray-700 bg-gray-200 border-0 py-2 px-6 focus:outline-none hover:bg-gray-300 rounded text-lg">View</button>
-          <button class="ml-4 inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Add to Cart</button>
-        </div>
+        <p class="mt-1" id="price-${idpro}">₹ ${product.price}</p>
+        <button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded cart " id="${idpro}" >Add to Cart</button>
         </div>
     </div>
 	`;
   }
-	
+
 	list.innerHTML +=html;
+	$('.cart').click(function(){
+    var cart,size;
+
+
+
+    if(window.localStorage.getItem(myParam)==null)
+    {
+        cart={};
+        cartItem={};
+        if(window.localStorage.length==0)
+        {
+            size=0;
+        }
+        else
+        {
+             size=JSON.parse(localStorage.getItem("size"));
+        }
+//        size=1;
+    }
+    else
+    {
+        cart=JSON.parse(localStorage.getItem(myParam));
+        cartItem=JSON.parse(localStorage.getItem(myParam+'-item'));
+        size=JSON.parse(localStorage.getItem("size"));
+    }
+    if(cart[this.id]!=1)
+    {
+        size=JSON.parse(localStorage.getItem("size"));
+        size++;
+        var aq=document.querySelector('#price-'+this.id).innerHTML.split(" ")[1];
+        cartItem[this.id]=aq;
+        cart[this.id]=1;
+    }
+    window.localStorage.setItem(myParam+'-item',JSON.stringify(cartItem));
+    window.localStorage.setItem("size",JSON.stringify(size));
+    window.localStorage.setItem(myParam,JSON.stringify(cart));
+
+    })
 }
 
 
@@ -80,3 +119,5 @@ db.collection('shop/'+myParam+'/product').add({
   console.log(err.message);
 });
 });
+
+

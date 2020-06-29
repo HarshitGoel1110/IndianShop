@@ -42,6 +42,10 @@ signupForm.addEventListener('submit', (e) => {
 
   // sign up the user & add firestore data
   auth.createUserWithEmailAndPassword(email, password).then(cred => {
+    firebase.auth().currentUser.sendEmailVerification().then(function() {
+      // Email sent.
+      console.log("sent");
+    });
     return db.collection('users').doc(cred.user.uid).set({
       name: signupForm['signup-name'].value,
       mobileno: signupForm['signup-mobileno'].value,

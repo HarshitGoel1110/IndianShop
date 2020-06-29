@@ -44,13 +44,15 @@ signupForm.addEventListener('submit', (e) => {
   auth.createUserWithEmailAndPassword(email, password).then(cred => {
     firebase.auth().currentUser.sendEmailVerification().then(function() {
       // Email sent.
+      alert("Signup Successful !!!");
       console.log("sent");
     });
-    return db.collection('users').doc(cred.user.uid).set({
+    db.collection('users').doc(cred.user.uid).set({
       name: signupForm['signup-name'].value,
       mobileno: signupForm['signup-mobileno'].value,
       shop: false
     });
+    auth.signOut();
   }).then(() => {
     // close the signup modal & reset form
     signupForm.reset();
@@ -79,8 +81,12 @@ const email = loginForm['login-email'].value;
 const password = loginForm['login-password'].value;
 
 // log the user in
-auth.signInWithEmailAndPassword(email, password).then((cred) => {
-  
+auth.signInWithEmailAndPassword(email, password).then((user) => {
+  if (!firebase.auth().currentUser.emailVerified)
+  {
+    auth.signOut();
+    alert("Verify your email first and try logging in...");
+  }
   loginForm.reset();
 });
 

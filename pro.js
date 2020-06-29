@@ -14,9 +14,19 @@ db.collection('shop').doc(myParam).get().then(doc=>{
 
 console.log(myParam);
 firebase.auth().onAuthStateChanged( user => {
+  list.innerHTML='';
   db.collection('shop/'+myParam+'/product').get().then((snapshot) => {
     snapshot.docs.forEach(doc => {
-        dispProduct(doc.data(),firebase.auth().currentUser.uid,doc.id);
+        var ui=firebase.auth().currentUser,user_id;
+        if(!ui)
+        {
+            user_id=null;
+        }
+        else
+        {
+            user_id=ui.uid;
+        }
+        dispProduct(doc.data(),doc.id,user_id);
     })
 });
   if (user) {
@@ -27,8 +37,10 @@ firebase.auth().onAuthStateChanged( user => {
   }
 });
 
-const dispProduct=(product,user,idpro)=>{
+function dispProduct(product,idpro,user)
+{
   let html;
+  console.log(myParam,user);
   if (myParam == user){
     html=`
     <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
@@ -62,6 +74,11 @@ const dispProduct=(product,user,idpro)=>{
 
 	list.innerHTML +=html;
 	$('.cart').click(function(){
+	    if(user==null)
+	    {
+	        return alert("You are not logged in");
+	    }
+
     var cart,size;
 
 

@@ -4,6 +4,8 @@ const accountDetails = document.querySelector('.account-details');
 const create = document.querySelector('.create');
 const view = document.querySelector('.view');
 
+
+
 const setupUI = (user) => {
   if (user) {
     // account info
@@ -41,5 +43,6 @@ const setupUI = (user) => {
     view.style.display='none';
     loggedInLinks.forEach(item => item.style.display = 'none');
     loggedOutLinks.forEach(item => item.style.display = 'block');
+    localStorage.clear();
   }
 };

@@ -35,7 +35,8 @@ const setupUI = (user) => {
     });
     loggedInLinks.forEach(item => item.style.display = 'block');
     loggedOutLinks.forEach(item => item.style.display = 'none');
-  } else {
+  }
+  else {
     // clear account info
     accountDetails.innerHTML = '';
     // toggle user elements

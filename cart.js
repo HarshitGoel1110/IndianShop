@@ -1,6 +1,4 @@
 
-
-
 var w=window.localStorage;
 var i;
 var html;
@@ -68,7 +66,7 @@ for (var key in w) {
 
                 utr[pro.id]=pro.data().price;
                 html=`
-                <table class="table table-image " id='view-${wer}-${pro.id}'>
+                <table class="table table-image remove-${wer}" id='view-${wer}-${pro.id}'>
                 <tbody>
                   <tr>
                     <td class="w-25">
@@ -113,7 +111,7 @@ for (var key in w) {
                             <h5>Total: <span class="price text-success final-total" id='final-${wer}'>${total}</span></h5>
                         </div>
                         <div class="container ">
-                        <a class="modal-open bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded m-4 float-right mr-16 buy_shop" id='${wer}'>
+                        <a class="modal-open bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded m-4 float-right mr-16 buy_shop" id='buy-${wer}'>
                             Buy
                         </a>
                         </div>
@@ -181,7 +179,31 @@ for (var key in w) {
                         sans();
                         window.localStorage.setItem(wer+'-item',JSON.stringify(utr));
                         $('.buy_shop').click(function(){
-                            console.log(this.id,"clicked");
+                            var shop_id=this.id.split("-")[1];
+                            console.log(shop_id,"clicked",auth.W);
+                            var qw=JSON.parse(localStorage.getItem(shop_id));
+
+                            var timestamp=JSON.stringify(Date.now());
+                               db.collection('shop/'+shop_id+'/purchased').doc(timestamp).set({
+                                user:auth.W,
+                                product:qw
+
+                               });
+
+                             db.collection('users/'+auth.W+'/bought').doc(timestamp).set({
+                                shop:shop_id,
+                                product:qw
+                             }
+                             );
+
+
+                             localStorage.removeItem(shop_id);
+                             localStorage.removeItem(shop_id+"-item");
+                             document.querySelectorAll('.remove-'+shop_id).forEach(doc=>{
+                                             console.log(doc);
+                                             doc.style.display='none';
+                                             });
+                             alert(`Product  Bought  from shop ${shop_id}`);
                         })
 
 

@@ -119,31 +119,31 @@ function dispProduct(product,idpro,user)
 // add new product
 const createprodForm = document.querySelector('#product-form');
 createprodForm.addEventListener('submit', (e) => {
-e.preventDefault();
+  e.preventDefault();
 
-var timestamp = Number(new Date());
-var fn = timestamp.toString();
-var file = document.getElementById("product_photo").files[0];
-var url="";
-firebase.storage().ref('images/' + fn + '.jpg').put(file).then(function() {
-  firebase.storage().ref('images/' + fn + '.jpg').getDownloadURL().then(imgUrl => {
-  url = imgUrl.toString();
-  console.log(url);
-}).then(function(){
-  console.log(createprodForm);
-  db.collection('shop/'+myParam+'/product').add({
-    name: createprodForm['product-name'].value,
-    description: createprodForm['product-desc'].value,
-    price: createprodForm['product-price'].value,
-    image: url
+  var timestamp = Number(new Date());
+  var fn = timestamp.toString();
+  var file = document.getElementById("product_photo").files[0];
+  var url="";
+  firebase.storage().ref('images/' + fn + '.jpg').put(file).then(function() {
+    firebase.storage().ref('images/' + fn + '.jpg').getDownloadURL().then(imgUrl => {
+    url = imgUrl.toString();
+    console.log(url);
+  }).then(function(){
+    console.log(createprodForm);
+    db.collection('shop/'+myParam+'/product').add({
+      name: createprodForm['product-name'].value,
+      description: createprodForm['product-desc'].value,
+      price: createprodForm['product-price'].value,
+      image: url
+  }).then(() => {
+    createprodForm.reset();
+    location.reload();
+  }).catch(err => {
+    console.log(err.message);
   });
-}).then(() => {
-  createprodForm.reset();
-  // location.reload();
-}).catch(err => {
-  console.log(err.message);
-});
-});
+  });
+  });
 });
 
 

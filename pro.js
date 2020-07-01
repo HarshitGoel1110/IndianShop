@@ -45,7 +45,7 @@ function dispProduct(product,idpro,user)
     html=`
     <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
         <a class="block relative h-48 rounded overflow-hidden">
-        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://dummyimage.com/428x268">
+        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="${product.image}">
         </a>
         <div class="mt-4">
         <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">${product.description}</h3>
@@ -59,7 +59,7 @@ function dispProduct(product,idpro,user)
     html=`
     <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
         <a class="block relative h-48 rounded overflow-hidden">
-        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://dummyimage.com/428x268">
+        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="${product.image}">
         </a>
         <div class="mt-4">
 
@@ -86,7 +86,6 @@ function dispProduct(product,idpro,user)
     if(window.localStorage.getItem(myParam)==null)
     {
         cart={};
-        cartItem={};
         if(window.localStorage.length==0)
         {
             size=0;
@@ -100,18 +99,14 @@ function dispProduct(product,idpro,user)
     else
     {
         cart=JSON.parse(localStorage.getItem(myParam));
-        cartItem=JSON.parse(localStorage.getItem(myParam+'-item'));
         size=JSON.parse(localStorage.getItem("size"));
     }
     if(cart[this.id]!=1)
     {
         size=JSON.parse(localStorage.getItem("size"));
         size++;
-        var aq=document.querySelector('#price-'+this.id).innerHTML.split(" ")[1];
-        cartItem[this.id]=aq;
         cart[this.id]=1;
     }
-    window.localStorage.setItem(myParam+'-item',JSON.stringify(cartItem));
     window.localStorage.setItem("size",JSON.stringify(size));
     window.localStorage.setItem(myParam,JSON.stringify(cart));
 
@@ -122,19 +117,37 @@ function dispProduct(product,idpro,user)
 
 
 // add new product
-const createprodForm = document.querySelector('#product-form');
-createprodForm.addEventListener('submit', (e) => {
-e.preventDefault();
-db.collection('shop/'+myParam+'/product').add({
-  name: createprodForm['product-name'].value,
-  description: createprodForm['product-desc'].value,
-  price: createprodForm['product-price'].value
-}).then(() => {
-  createprodForm.reset();
-  location.reload();
-}).catch(err => {
-  console.log(err.message);
-});
-});
+function addpro()
+{
+  const createprodForm = document.querySelector('#product-form');
+  createprodForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  var timestamp = Number(new Date());
+  var fn = timestamp.toString();
+  var file = document.getElementById("product_photo").files[0];
+  var url="";
+  firebase.storage().ref('images/' + fn + '.jpg').put(file).then(function() {
+    firebase.storage().ref('images/' + fn + '.jpg').getDownloadURL().then(imgUrl => {
+    url = imgUrl.toString();
+    console.log(url);
+  });
+  });
+
+  console.log(url);
+
+  db.collection('shop/'+myParam+'/product').add({
+    name: createprodForm['product-name'].value,
+    description: createprodForm['product-desc'].value,
+    price: createprodForm['product-price'].value,
+    image: url
+  }).then(() => {
+    createprodForm.reset();
+    // location.reload();
+  }).catch(err => {
+    console.log(err.message);
+  });
+  });
+};
 
 

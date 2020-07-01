@@ -31,6 +31,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-storage.js"></script>
 
     <script>
         // Your web app's Firebase configuration
@@ -109,12 +110,12 @@
               <label class="block text-gray-700 text-sm font-bold mb-2" for="product-price">
                 Product Image
                </label>
-               <div class="bg-gray-200 text-gray-500 text-xs mt-5 ml-3 font-bold px-4 py-2 rounded-lg float-left hover:bg-gray-300 hover:text-gray-600 relative overflow-hidden cursor-pointer">
-                <input type="file" name="product_photo" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"> Add Product Image
+              <div class="bg-gray-200 text-gray-500 text-xs mt-5 ml-3 font-bold px-4 py-2 rounded-lg float-left hover:bg-gray-300 hover:text-gray-600 relative overflow-hidden cursor-pointer">
+                <input type="file" id="product_photo" name="files[]" multiple />
               </div>
             </div>
               <div class="flex items-center justify-between">
-                <button class="modal-close bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                <button onclick="addpro()" class="modal-close bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                   Add Product
                 </button>
               </div>

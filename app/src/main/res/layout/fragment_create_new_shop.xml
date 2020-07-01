@@ -4,122 +4,156 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".CreateNewShop">
+    tools:context=".CreateNewShop"
+    android:screenOrientation="portrait">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ScrollView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/createNewShopName"
-            android:layout_width="332dp"
-            android:layout_height="61dp"
-            android:layout_marginTop="64dp"
-            android:hint="name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="hint" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="Enter Shop details"
+                android:gravity="center"
+                android:textStyle="italic|bold"
+                android:textSize="35sp"
+                android:textColor="@color/pinkred"
+                android:layout_marginTop="15dp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/createNewShopName"
+                android:layout_width="340dp"
+                android:layout_height="50dp"
+                android:background="@drawable/editable_text"
+                android:inputType="textPassword"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:layout_marginTop="64dp"
+                android:hint="Shop name"
+                android:layout_gravity="center">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/createNewAddress"
+                android:layout_width="340dp"
+                android:layout_height="50dp"
+                android:background="@drawable/editable_text"
+                android:inputType="textPassword"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:layout_marginTop="64dp"
+                android:hint="Shop Address"
+                android:layout_gravity="center">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/createNewCity"
+                android:layout_width="340dp"
+                android:layout_height="50dp"
+                android:background="@drawable/editable_text"
+                android:inputType="textPassword"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:layout_marginTop="64dp"
+                android:hint="Shop City"
+                android:layout_gravity="center">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/createNewPincode"
+                android:layout_width="340dp"
+                android:layout_height="50dp"
+                android:background="@drawable/editable_text"
+                android:inputType="textPassword"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:layout_marginTop="64dp"
+                android:hint="Shop Pincode"
+                android:layout_gravity="center">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:inputType="number"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/createNewAddress"
-            android:layout_width="332dp"
-            android:layout_height="61dp"
-            android:layout_marginTop="32dp"
-            android:hint="Shop Address"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createNewShopName">
-
-            <com.google.android.material.textfield.TextInputEditText
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="hint" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:paddingTop="20dp"
+                android:paddingBottom="30dp"
+                android:gravity="center">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/createNewCity"
-            android:layout_width="332dp"
-            android:layout_height="61dp"
-            android:layout_marginTop="32dp"
-            android:hint="Shop City"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createNewAddress">
+                <Button
+                    android:id="@+id/createNewButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="155dp"
+                    android:layout_marginEnd="129dp"
+                    android:layout_marginBottom="28dp"
+                    android:background="@drawable/welcome_button"
+                    android:onClick="createNewShop"
+                    android:paddingLeft="25dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="25dp"
+                    android:paddingBottom="10dp"
+                    android:text="Button"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="hint" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/createNewEmail"
-            android:layout_width="332dp"
-            android:layout_height="61dp"
-            android:layout_marginTop="32dp"
-            android:hint="Shop Email"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createNewCity">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="hint" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/createNewPhno"
-            android:layout_width="332dp"
-            android:layout_height="61dp"
-            android:layout_marginTop="32dp"
-            android:hint="Shop Phone Number"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createNewEmail">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="hint" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/createNewPincode"
-            android:layout_width="332dp"
-            android:layout_height="61dp"
-            android:layout_marginTop="32dp"
-            android:hint="Shop Phone Number"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createNewPhno">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="hint" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/createNewButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="52dp"
-            android:text="Button"
-            android:onClick="createNewShop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createNewPincode" />
+                <com.github.ybq.android.spinkit.SpinKitView
+                    android:id="@+id/createAllProgressBar"
+                    style="@style/SpinKitView.Large.Wave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="177dp"
+                    android:layout_marginEnd="157dp"
+                    app:SpinKit_Color="@color/pinkred"
+                    android:visibility="invisible"/>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
 
 </FrameLayout>

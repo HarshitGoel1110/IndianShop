@@ -1,8 +1,10 @@
 package com.harshit.indianstore;
 
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -20,6 +27,12 @@ public class MyCartView extends Fragment {
     DatabaseHelper db;
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
+
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+
+    final HashMap<String , String> shopIdToShopName = new HashMap<>();
+
+    final HashMap<String , HashMap<String , Combine>> data = new HashMap<>();
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -65,8 +78,6 @@ public class MyCartView extends Fragment {
 
     private void display() {
 
-        String a = "";
-
         Cursor cursor = db.getAllData();
         if(cursor.getCount() == 0){
             Toast.makeText(getContext(), "Your cart is empty...", Toast.LENGTH_SHORT).show();
@@ -76,45 +87,143 @@ public class MyCartView extends Fragment {
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        HashMap<String , HashMap<String , Combine>> data = new HashMap<>();
+        final RecyclerOuterCartAdapter adapter = new RecyclerOuterCartAdapter(getContext() , data , shopIdToShopName);
+        recyclerView.setAdapter(adapter);
+
         while(cursor.moveToNext()){
-            String shopId = cursor.getString(2);
-            String productId = cursor.getString(1);
-            String name = cursor.getString(3);
-            int quantity = 1;
-            int price = cursor.getInt(4);
+            final String shopId = cursor.getString(2);
+            final String productId = cursor.getString(1);
+            final String shopName = cursor.getString(3);
 
-            if(!data.containsKey(shopId)) {
-                HashMap<String , Combine> h = new HashMap<>();
-                h.put(productId , new Combine(name , price , quantity));
-                data.put(shopId , h);
-            }
+            final String[] name = new String[1];
+            final int quantity = 1;
+            final int[] price = {0};
+            final String[] image = {""};
 
-            else if(!(data.get(shopId)).containsKey(productId)){
-                data.get(shopId).put(productId , new Combine(name , price , quantity));
-            }
+            firebaseFirestore.collection("shop").document(shopId).collection("product").document(productId).get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if(documentSnapshot.exists()) {
+                                Toast.makeText(getContext(), shopId, Toast.LENGTH_SHORT).show();
+                                name[0] = documentSnapshot.getString("name");
+                                price[0] = Integer.parseInt(documentSnapshot.getString("price"));
+                                image[0] = documentSnapshot.getString("image");
 
-            a = a + cursor.getString(3) + " " + cursor.getString(1) + "\n";
+                                shopIdToShopName.put(shopId , shopName);
+
+                                if(!data.containsKey(shopId)) {
+                                    HashMap<String , Combine> h = new HashMap<>();
+                                    h.put(productId , new Combine(name[0], price[0], quantity , image[0], shopId));
+                                    data.put(shopId , h);
+                                }
+
+                                else if(!(data.get(shopId)).containsKey(productId)){
+                                    data.get(shopId).put(productId , new Combine(name[0], price[0], quantity , image[0], shopId));
+                                }
+                                adapter.notifyDataSetChanged();
+
+                            }
+                            else{
+                                Toast.makeText(getContext(), "Document is empty", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+//            String name = cursor.getString(3);
+//            int quantity = 1;
+//            int price = cursor.getInt(4);
+//            String image = cursor.getString(6);
+
+
+//            a = a + cursor.getString(3) + " " + cursor.getString(1) + "\n";
+
 
 
         }
 
-        RecyclerOuterCartAdapter adapter = new RecyclerOuterCartAdapter(getContext() , data);
-        recyclerView.setAdapter(adapter);
+    }
 
-        Toast.makeText(getContext(), a, Toast.LENGTH_LONG).show();
+    class task extends AsyncTask<Cursor , Void , Boolean>{
 
+
+        @Override
+        protected Boolean doInBackground(Cursor... cursors) {
+
+            Cursor cursor = cursors[0];
+
+            final HashMap<String , String> shopIdToShopName = new HashMap<>();
+
+            final HashMap<String , HashMap<String , Combine>> data = new HashMap<>();
+            while(cursor.moveToNext()){
+                final String shopId = cursor.getString(2);
+                final String productId = cursor.getString(1);
+                final String shopName = cursor.getString(3);
+
+                final String[] name = new String[1];
+                final int quantity = 1;
+                final int[] price = {0};
+                final String[] image = {""};
+
+                firebaseFirestore.collection("shop").document(shopId).collection("product").document(productId).get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if(documentSnapshot.exists()) {
+                                    Toast.makeText(getContext(), shopId, Toast.LENGTH_SHORT).show();
+                                    name[0] = documentSnapshot.getString("name");
+                                    price[0] = Integer.parseInt(documentSnapshot.getString("price"));
+                                    image[0] = documentSnapshot.getString("image");
+
+                                    shopIdToShopName.put(shopId , shopName);
+
+                                    if(!data.containsKey(shopId)) {
+                                        HashMap<String , Combine> h = new HashMap<>();
+                                        h.put(productId , new Combine(name[0], price[0], quantity , image[0], shopId));
+                                        data.put(shopId , h);
+                                    }
+
+                                    else if(!(data.get(shopId)).containsKey(productId)){
+                                        data.get(shopId).put(productId , new Combine(name[0], price[0], quantity , image[0], shopId));
+                                    }
+
+                                }
+                                else{
+                                    Toast.makeText(getContext(), "Document is empty", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+            }
+            return null;
+        }
     }
 
     class Combine{
         String name;
         int quantity;
         int price;
+        String image;
+        String shopId = "";
 
-        public Combine(String name, int price , int quantity) {
+        public Combine(String name, int price , int quantity , String image , String shopId) {
             this.name = name;
             this.price = price;
             this.quantity = quantity;
+            this.image = image;
+            this.shopId = shopId;
         }
     }
 

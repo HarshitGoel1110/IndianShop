@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyCartView">
+    tools:context=".MyCartView"
+    android:screenOrientation="portrait">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,7 +13,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/myCartRecyclerFirst"/>
+            android:id="@+id/myCartRecyclerFirst"
+            android:background="@color/grey"/>
 
     </RelativeLayout>
 

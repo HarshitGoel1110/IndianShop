@@ -4,58 +4,93 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:background="@color/design_default_color_primary"
-tools:context=".SimpleAllUserDetails">
+android:background="@drawable/loginpage"
+tools:context=".SimpleAllUserDetails"
+    android:screenOrientation="portrait">
 
-<com.google.android.material.textfield.TextInputLayout
-    android:id="@+id/allUserName"
-    android:layout_width="284dp"
-    android:layout_height="60dp"
-    android:background="@color/pinkred"
-    android:hint="name"
-    app:layout_constraintBottom_toTopOf="@+id/allUserPhno"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.492"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.564">
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="hint" />
-</com.google.android.material.textfield.TextInputLayout>
+        android:layout_marginTop="60dp"
+        android:text="Enter Your Details"
+        android:textColor="@color/pinkred"
+        android:textSize="35sp"
+        android:textStyle="italic|bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.175"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-<com.google.android.material.textfield.TextInputLayout
-    android:id="@+id/allUserPhno"
-    android:layout_width="284dp"
-    android:layout_height="60dp"
-    android:background="@color/pinkred"
-    android:hint="phone number"
-    app:layout_constraintBottom_toTopOf="@+id/allUserButton"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.494"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.673">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/allUserName"
+        android:layout_width="284dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/editable_text"
+        android:hint="name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/allUserPhno"
+        android:layout_width="284dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="64dp"
+        android:background="@drawable/editable_text"
+        android:hint="phone number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/allUserName">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:inputType="number"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/allUserButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="hint"
-        android:inputType="number" />
-</com.google.android.material.textfield.TextInputLayout>
+        android:layout_marginTop="64dp"
+        android:text="Create"
+        android:textStyle="bold|italic"
+        android:background="@drawable/welcome_button"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/allUserPhno" />
 
-<Button
-    android:id="@+id/allUserButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Create"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.498"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.759" />
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/simpleAllUserProgressBar"
+        style="@style/SpinKitView.Large.Wave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:SpinKit_Color="@color/pinkred"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/allUserPhno"
+        app:layout_constraintVertical_bias="0.205" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

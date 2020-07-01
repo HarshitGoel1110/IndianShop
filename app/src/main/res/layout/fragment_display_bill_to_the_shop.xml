@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DisplayBillToTheShop"
+    android:screenOrientation="landscape">
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+
+        <TableLayout
+            android:id="@+id/displayBillTableLayout"
+            android:layout_width="411dp"
+            android:layout_height="643dp"
+            android:layout_weight="8"/>
+
+        <Button
+            android:id="@+id/updateDelivered"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Deliver"
+            android:visibility="invisible"
+            android:layout_weight="3"
+            android:textSize="30sp"
+            android:textColor="@color/black"
+            android:layout_gravity="bottom"/>
+
+    </LinearLayout>
+
+</FrameLayout>

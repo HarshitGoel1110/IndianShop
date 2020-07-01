@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/history_cart"
+    android:layout_margin="20dp"
+    android:padding="10dp"
+    android:elevation="25dp">
+
+        <TextView
+            android:id="@+id/productBoughtListViewName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ShopName"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textStyle="bold|italic"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/productBoughtListViewDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:gravity="center"
+            android:textSize="13sp"
+            android:textStyle="bold|italic"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/productBoughtListViewDelivered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delivered"
+            android:gravity="center"
+            android:textSize="13sp"
+            android:textStyle="bold|italic"/>
+
+
+</LinearLayout>

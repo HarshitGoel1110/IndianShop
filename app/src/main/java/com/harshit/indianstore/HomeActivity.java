@@ -10,15 +10,21 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.Wave;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,6 +46,8 @@ public class HomeActivity extends AppCompatActivity {
     FirebaseFirestore db;
     DocumentReference user;
 
+    SharedPreferences sharedPreferences;
+
     FragmentManager fragmentManager;
 
     NavigationView navigationView;
@@ -47,6 +55,9 @@ public class HomeActivity extends AppCompatActivity {
     ActionBarDrawerToggle actionBarDrawerToggle;
     boolean hasShop = false;
     MenuItem shop;
+
+    String shopEmail = "";
+    String shopPhoneNumber = "";
 
     Toolbar toolbar;
 
@@ -94,8 +105,19 @@ public class HomeActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , new MyCartView() , null).addToBackStack(null).commit();
                 break;
             }
-            default:{
-
+            case R.id.drawerHomePurchased : {
+                if(hasShop) {
+                    fragmentManager.beginTransaction().replace(R.id.homeActivityFrame, new PurchasedThroughOurShop(), null).addToBackStack(null).commit();
+                    break;
+                }
+                else{
+                    Toast.makeText(this, "This feature is only available to Users whi have their shop on our website", Toast.LENGTH_LONG).show();
+                    break;
+                }
+            }
+            case R.id.drawerHomeWeHaveBought : {
+                fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , new UserBought() , null).addToBackStack(null).commit();
+                break;
             }
         }
         menuItem.setChecked(true);
@@ -117,11 +139,30 @@ public class HomeActivity extends AppCompatActivity {
     private void setShop() {
         String uid = mUser.getUid();
         Toast.makeText(this, uid, Toast.LENGTH_SHORT).show();
+
         user = db.collection("users").document(uid);
+
         user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(getString(R.string.user_email) , mUser.getEmail());
+                    editor.putString(getString(R.string.user_name) , documentSnapshot.getString("name"));
+                    editor.putString(getString(R.string.user_number) , documentSnapshot.getString("mobile"));
+                    editor.putBoolean(getString(R.string.user_shop) , documentSnapshot.getBoolean("shop"));
+                    editor.commit();
+
+                    TextView name = findViewById(R.id.headerUserName);
+                    TextView email = findViewById(R.id.headerUserEmail);
+
+                    name.setText(sharedPreferences.getString(getString(R.string.user_name) , "Anonymous"));
+                    email.setText(sharedPreferences.getString(getString(R.string.user_email) , "abc@gmail.com"));
+
+                    shopEmail = mUser.getEmail();
+                    shopPhoneNumber = documentSnapshot.getString("mobile");
+
                     hasShop = documentSnapshot.getBoolean("shop");
                     NavigationView navigationView = findViewById(R.id.homeNavigation);
                     Menu menu = navigationView.getMenu();
@@ -157,6 +198,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void logout() {
         FirebaseAuth.getInstance().signOut();
+        this.deleteDatabase("cart");
         Intent intent = new Intent(HomeActivity.this , WelcomeScreen.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -201,6 +243,8 @@ public class HomeActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        sharedPreferences = this.getSharedPreferences(getString(R.string.user_details), Context.MODE_PRIVATE);
+
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , new AllShops() , null).addToBackStack(null).commit();
         Toast.makeText(HomeActivity.this, "working", Toast.LENGTH_SHORT).show();
@@ -210,24 +254,40 @@ public class HomeActivity extends AppCompatActivity {
     // --------------------------------------------------the last 2 functions are of create new shop fragment class ------------------------------------
 
     public void createNewShop(View v){
+
+        final Button button = findViewById(R.id.createNewButton);
+
+        final ProgressBar progressBar = findViewById(R.id.createAllProgressBar);
+        Sprite wave = new Wave();
+        progressBar.setIndeterminateDrawable(wave);
+
         TextInputLayout mName = findViewById(R.id.createNewShopName);
         TextInputLayout mAddress = findViewById(R.id.createNewAddress);
         TextInputLayout mCity = findViewById(R.id.createNewCity);
-        TextInputLayout mEmail = findViewById(R.id.createNewEmail);
-        TextInputLayout mNumber = findViewById(R.id.createNewPhno);
+//        TextInputLayout mEmail = findViewById(R.id.createNewEmail);
+//        TextInputLayout mNumber = findViewById(R.id.createNewPhno);
         TextInputLayout mPincode = findViewById(R.id.createNewPincode);
 
-        String name = mName.getEditText().getText().toString();
-        String address = mAddress.getEditText().getText().toString();
-        String city = mCity.getEditText().getText().toString();
-        String email = mEmail.getEditText().getText().toString();
-        String number = mNumber.getEditText().getText().toString();
-        String pincode = mPincode.getEditText().getText().toString();
+        String name = mName.getEditText().getText().toString().trim();
+        String address = mAddress.getEditText().getText().toString().trim();
+        String city = mCity.getEditText().getText().toString().trim();
+        String email = shopEmail;
+        String number = shopPhoneNumber;
+        String pincode = mPincode.getEditText().getText().toString().trim();
 
         if(name.isEmpty() || address.isEmpty() || city.isEmpty() || email.isEmpty() || number.isEmpty() || pincode.isEmpty()){
             Toast.makeText(this, "Please fill all the entries...", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if(pincode.length() != 6){
+            Toast.makeText(this, "Please enter a valid pincode", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        setDisable(button , progressBar);
+
+
 
         HashMap<String , Object> m = new HashMap<>();
         m.put("name" , name);
@@ -241,7 +301,7 @@ public class HomeActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        updateField();
+                        updateField(button , progressBar);
                         // update the document
                     }
                 })
@@ -249,11 +309,12 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(HomeActivity.this, "Error occurred", Toast.LENGTH_SHORT).show();
+                        setEnable(button , progressBar);
                     }
                 });
     }
 
-    public void updateField(){
+    public void updateField(final Button loginButton , final ProgressBar progressBar){
         HashMap<String , Object> m = new HashMap<>();
         m.put("shop" , true);
 
@@ -264,15 +325,29 @@ public class HomeActivity extends AppCompatActivity {
                         Toast.makeText(HomeActivity.this, "added successfully...", Toast.LENGTH_SHORT).show();
                         hasShop = true;
                         shop.setTitle("View Your Shop");
+                        getSupportFragmentManager().beginTransaction().replace(R.id.homeActivityFrame , new ViewShop() , null).commit();
                     }
                 })
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onSuccess(Void aVoid) {
+                    public void onFailure(@NonNull Exception e) {
                         Toast.makeText(HomeActivity.this, "Error Occurred", Toast.LENGTH_SHORT).show();
+                        setDisable(loginButton , progressBar);
                     }
                 });
 
+    }
+
+    public void setEnable(Button loginButton , ProgressBar progressBar){
+        loginButton.setEnabled(true);
+        loginButton.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    public void setDisable(Button loginButton , ProgressBar progressBar){
+        loginButton.setEnabled(false);
+        loginButton.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
 }

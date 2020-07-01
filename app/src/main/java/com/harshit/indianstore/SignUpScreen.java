@@ -20,6 +20,7 @@ import com.github.ybq.android.spinkit.style.Wave;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +35,7 @@ public class SignUpScreen extends AppCompatActivity {
 
     FirebaseAuth mAuth;
 
-    TextInputEditText mEmail , mPassword;
+    TextInputLayout mEmail , mPassword;
     Button signButton;
     ProgressBar progressBar;
 
@@ -57,8 +58,11 @@ public class SignUpScreen extends AppCompatActivity {
         signButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                email = mEmail.getText().toString();
-                password = mPassword.getText().toString();
+                email = mEmail.getEditText().getText().toString();
+                password = mPassword.getEditText().getText().toString();
+
+                email = email.trim();
+                password = password.trim();
 
                 if(!verifyAndProceed())
                     return;

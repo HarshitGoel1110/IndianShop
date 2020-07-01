@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,8 +29,8 @@ public class LoginScreen extends AppCompatActivity {
 
     FirebaseAuth mAuth;
 
-    TextInputEditText mEmail;
-    TextInputEditText mPassword;
+    TextInputLayout mEmail;
+    TextInputLayout mPassword;
     Button loginButton;
     ProgressBar progressBar;
 
@@ -52,8 +53,11 @@ public class LoginScreen extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                email = mEmail.getText().toString();
-                password = mPassword.getText().toString();
+                email = mEmail.getEditText().getText().toString();
+                password = mPassword.getEditText().getText().toString();
+
+                email = email.trim();
+                password = password.trim();
 
                 if(!verifyAndProceed())
                     return;

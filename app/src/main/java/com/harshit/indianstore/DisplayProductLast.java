@@ -1,5 +1,7 @@
 package com.harshit.indianstore;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,16 +10,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 public class DisplayProductLast extends Fragment {
 
     DatabaseHelper databaseHelper;
     String shopId = "";
+    String shopName = "";
     String productId = "";
     String desc = "";
     String name = "";
+    String image = "";
     int price = 0;
+
+    Button button;
+    TextView mProductName;
+    TextView mProductDescription;
+    TextView mProductPrice;
+    ImageView mProductImage;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -55,17 +69,29 @@ public class DisplayProductLast extends Fragment {
 
         Bundle bundle = getArguments();
         shopId = bundle.getString("shopId");
+        shopName = bundle.getString("shopName");
+
         productId = bundle.getString("productId");
         desc = bundle.getString("desc");
         name = bundle.getString("name");
         price = bundle.getInt("price");
+        image = bundle.getString("image");
 
         databaseHelper = new DatabaseHelper(getContext());
 
-        Button button = view.findViewById(R.id.displayLastButton);
+        button = view.findViewById(R.id.displayLastButton);
+        mProductImage = view.findViewById(R.id.displayLastImage);
+        mProductName = view.findViewById(R.id.displayLastName);
+        mProductDescription = view.findViewById(R.id.displayLastDesc);
+        mProductPrice = view.findViewById(R.id.displayLastPrice);
+
+        Picasso.get().load(image).fit().centerCrop().into(mProductImage);
+        mProductName.setText(name);
+        mProductDescription.setText(desc);
+        mProductPrice.setText("Rs " + price);
 
         if(databaseHelper.isPresentAlready(productId)){
-            button.setEnabled(false);
+//            button.setEnabled(false);
             Toast.makeText(getContext(), "Already present in your cart...", Toast.LENGTH_LONG).show();
         }
 
@@ -82,9 +108,14 @@ public class DisplayProductLast extends Fragment {
     }
 
     private void addToCart() {
-        boolean isInserted = databaseHelper.insertData(productId , shopId ,
-                name , price);
+        DatabaseHelper db = new DatabaseHelper(getContext());
+        if(!db.getCount()){
+            Toast.makeText(getContext(), "Can insert at most 20 items in the cart", Toast.LENGTH_LONG).show();
+            return;
+        }
+        boolean isInserted = databaseHelper.insertData(productId , shopId , shopName);
         if(isInserted){
+//            button.setEnabled(false);
             Toast.makeText(getContext(), "Added Successfully \n You can adjust the quantity directly from the cart", Toast.LENGTH_SHORT).show();
         }
         else{

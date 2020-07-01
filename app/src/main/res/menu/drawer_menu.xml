@@ -2,10 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/drawerHomeProfile"
-        android:title="Profile" />
-
-    <item
         android:id="@+id/drawerHomeBuy"
         android:title="All shops" />
 
@@ -17,5 +13,12 @@
         android:id="@+id/drawerHomeMyCart"
         android:title="My Cart" />
 
+    <item
+        android:id="@+id/drawerHomePurchased"
+        android:title="Purchased through our shop" />
+
+    <item
+        android:id="@+id/drawerHomeWeHaveBought"
+        android:title="Our Placed Order Details" />
 
 </menu>

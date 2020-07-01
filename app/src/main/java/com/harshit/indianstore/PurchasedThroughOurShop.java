@@ -2,10 +2,9 @@ package com.harshit.indianstore;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.paging.PagedList;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,30 +13,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class DisplayProductToUser extends Fragment implements AllProductFirestoreAdapter.OnListItemClick {
+import java.util.ArrayList;
+import java.util.HashMap;
 
-    FirebaseFirestore firebaseFirestore;
+public class PurchasedThroughOurShop extends Fragment implements ShopProductHistoryFirestoreAdapter.OnListItemClick {
+
     FirebaseAuth mAuth;
+    FirebaseFirestore firebaseFirestore;
     FirebaseUser mUser;
-
-    FirestorePagingAdapter adapter;
 
     RecyclerView recyclerView;
 
-
-    String shopId = "";
-    String shopName = "";
+    FirestorePagingAdapter adapter;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -45,12 +43,12 @@ public class DisplayProductToUser extends Fragment implements AllProductFirestor
     private String mParam1;
     private String mParam2;
 
-    public DisplayProductToUser() {
+    public PurchasedThroughOurShop() {
         // Required empty public constructor
     }
 
-    public static DisplayProductToUser newInstance(String param1, String param2) {
-        DisplayProductToUser fragment = new DisplayProductToUser();
+    public static PurchasedThroughOurShop newInstance(String param1, String param2) {
+        PurchasedThroughOurShop fragment = new PurchasedThroughOurShop();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,7 +63,6 @@ public class DisplayProductToUser extends Fragment implements AllProductFirestor
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
@@ -73,45 +70,43 @@ public class DisplayProductToUser extends Fragment implements AllProductFirestor
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.fragment_display_product_to_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_purchased_through_our_shop , container , false);
+
+        recyclerView = view.findViewById(R.id.purchasedThroughOurShopRecyclerView);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
 
-        Bundle bundle = this.getArguments();
-        shopId = bundle.getString("shop uid");
-        shopName = bundle.getString("shop name");
-
         //Query
         Query query = firebaseFirestore.collection("shop")
-                .document(shopId).collection("product");
+                .document(mUser.getUid()).collection("purchased").orderBy("timestamp" , Query.Direction.DESCENDING);
+
 
         PagedList.Config config = new PagedList.Config.Builder()
-                .setInitialLoadSizeHint(8)
-                .setPageSize(3)
-                .build();
+                .setInitialLoadSizeHint(10)
+                .setPageSize(5).build();
 
 //        recycler Options
-        FirestorePagingOptions<ProductsModel> options = new FirestorePagingOptions.Builder<ProductsModel>()
-                .setQuery(query , config , ProductsModel.class)
+
+        FirestorePagingOptions<ShopHistoryModel> options = new FirestorePagingOptions.Builder<ShopHistoryModel>()
+                .setQuery(query , config , ShopHistoryModel.class)
                 .build();
 
-        adapter = new AllProductFirestoreAdapter(options , this);
+        adapter = new ShopProductHistoryFirestoreAdapter(options , this , getContext());
 
-        recyclerView = view.findViewById(R.id.displayToUserRecyclerView);
         recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         return view;
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
         adapter.stopListening();
-        Toast.makeText(getContext(), "stopped", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -122,22 +117,16 @@ public class DisplayProductToUser extends Fragment implements AllProductFirestor
 
     @Override
     public void onItemClick(DocumentSnapshot snapshot, int position) {
-        Toast.makeText(getContext(), "selected", Toast.LENGTH_SHORT).show();
-
+        HashMap<String , ArrayList<Object>> product = (HashMap<String , ArrayList<Object>>)snapshot.get("product");
+        DisplayBillToTheShop displayBillToTheShop = new DisplayBillToTheShop();
         Bundle bundle = new Bundle();
-        bundle.putString("shopName" , shopName);
-        bundle.putString("shopId" , shopId);
-        bundle.putString("productId" , snapshot.getId());
-        bundle.putString("desc" , snapshot.getString("description"));
-        bundle.putString("name" , snapshot.getString("name"));
-        bundle.putInt("price" , Integer.parseInt(snapshot.getString("price")));
-        bundle.putString("image" , snapshot.getString("image"));
-
-        DisplayProductLast displayProductLast = new DisplayProductLast();
-        displayProductLast.setArguments(bundle);
-
-        getFragmentManager().beginTransaction().replace(R.id.homeActivityFrame , displayProductLast , null).addToBackStack(null).commit();
-
-
+        bundle.putBoolean("byShop" , true);
+        bundle.putSerializable("bill" , product);
+        bundle.putString("shopId" , mUser.getUid());
+        bundle.putString("userId" , snapshot.getString("user"));
+        bundle.putString("documentId" , snapshot.getId());
+        bundle.putBoolean("isDelivered" , snapshot.getBoolean("delivered"));
+        displayBillToTheShop.setArguments(bundle);
+        getFragmentManager().beginTransaction().replace(R.id.homeActivityFrame , displayBillToTheShop , null).addToBackStack(null).commit();
     }
 }

@@ -1,34 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_marginBottom="20dp"
-    android:elevation="15dp">
+    android:layout_margin="20dp"
+    android:elevation="15dp"
+    android:background="@drawable/history_cart">
 
     <TextView
         android:id="@+id/cartShopName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:textSize="20sp"
+        android:textStyle="italic|bold"
         android:text="Shop name"
-        android:layout_gravity="center"/>
+        android:gravity="center"
+        android:layout_marginTop="20dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartOuterRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="0dp" />
+        android:layout_margin="15dp"/>
 
-    <Button
-        android:id="@+id/cartOuterBuyNow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BuyNow"
-        android:layout_gravity="center"
-        android:layout_marginTop="25dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/cartOuterBuyNow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/grey"
+            android:text="Buy Now"
+            android:textSize="15dp"
+            android:padding="10dp"/>
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/cartOuterProgress"
+            style="@style/SpinKitView.Large.Wave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:SpinKit_Color="@color/grey" />
+
+        <Button
+            android:id="@+id/cartOuterDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/grey"
+            android:text="Delete"/>
+
+    </LinearLayout>
+
 
 </LinearLayout>

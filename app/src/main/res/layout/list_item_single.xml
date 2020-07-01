@@ -3,54 +3,63 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingRight="10dp"
     android:paddingTop="20dp"
-    android:paddingBottom="20dp">
+    android:paddingBottom="20dp"
+    android:background="@drawable/history_cart"
+    android:layout_margin="20dp"
+    android:elevation="25dp">
 
     <LinearLayout
-        android:layout_width="190dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="190dp"
-            android:layout_height="250dp"
+            android:id="@+id/list_item_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:src="@drawable/loginpage"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY"
+            android:layout_margin="20dp"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/list_item_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="TextView"
                 android:textSize="30dp"
                 android:textStyle="bold|italic"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:textAlignment="center"/>
 
             <TextView
                 android:id="@+id/list_item_description"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
                 android:textSize="20dp"
-                android:textColor="@color/black"/>
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black"
+                android:textAlignment="center"/>
 
             <TextView
                 android:id="@+id/list_item_price"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
                 android:textSize="30dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp"
+                android:textAlignment="center"/>
 
         </LinearLayout>
 

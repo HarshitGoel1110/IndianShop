@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.paging.PagedList;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +22,8 @@ import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,7 +37,7 @@ public class ViewShop extends Fragment implements AllProductFirestoreAdapter.OnL
     FirebaseAuth mAuth;
     FirebaseUser mUser;
 
-    FirestoreRecyclerAdapter adapter;
+    FirestorePagingAdapter adapter;
     FloatingActionButton button;
 
     RecyclerView recyclerView;
@@ -73,10 +77,14 @@ public class ViewShop extends Fragment implements AllProductFirestoreAdapter.OnL
         Query query = firebaseFirestore.collection("shop")
                 .document(mUser.getUid()).collection("product");
 
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(8)
+                .setPageSize(3)
+                .build();
 
 //        recycler Options
-        FirestoreRecyclerOptions<ProductsModel> options = new FirestoreRecyclerOptions.Builder<ProductsModel>()
-                .setQuery(query , ProductsModel.class)
+        FirestorePagingOptions<ProductsModel> options = new FirestorePagingOptions.Builder<ProductsModel>()
+                .setQuery(query , config , ProductsModel.class)
                 .build();
 
         adapter = new AllProductFirestoreAdapter(options , this);
@@ -95,9 +103,15 @@ public class ViewShop extends Fragment implements AllProductFirestoreAdapter.OnL
 
         recyclerView = view.findViewById(R.id.viewShopRecyclerView);
         recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
+//        if(adapter.getItemCount() == 0){
+//            Toast.makeText(getContext(), "Please add some items into your shop...", Toast.LENGTH_SHORT).show();
+//        }
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        button.setImageResource(R.drawable.ic_baseline_add_24);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

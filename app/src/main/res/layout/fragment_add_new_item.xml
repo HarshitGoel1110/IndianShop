@@ -5,73 +5,131 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AddNewItem"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/loginpage"
+    android:screenOrientation="portrait">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fill the details"
+            android:textColor="@color/pinkred"
+            android:textStyle="italic|bold"
+            android:textSize="30dp"
+            android:gravity="center"
+            android:layout_marginTop="35dp"/>
+
+        <ImageButton
+            android:id="@+id/addNewItemsImage"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="35dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/addNewdesc"
-            android:hint="description"
-            android:layout_width="332dp"
-            android:layout_height="61dp"
-            android:layout_marginTop="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addNewname">
+            android:id="@+id/addNewname"
+            android:layout_width="340dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/editable_text"
+            android:hint="Name"
+            android:inputType="textPassword"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:layout_gravity="center">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="hint" />
+                android:layout_marginLeft="10dp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/addNewdesc"
+            android:layout_width="340dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/editable_text"
+            android:hint="Description"
+            android:inputType="textPassword"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:layout_gravity="center">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"/>
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/addNewprice"
-            android:hint="price"
-            android:layout_width="332dp"
-            android:layout_height="61dp"
-            android:layout_marginTop="64dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addNewdesc">
+            android:layout_width="340dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/editable_text"
+            android:hint="Price"
+            android:inputType="textPassword"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:layout_gravity="center">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="hint" />
+                android:layout_marginLeft="10dp"
+                android:inputType="number"/>
+
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/addNewbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
-            android:text="Button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addNewprice"
-            android:onClick="addToFirebase"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/addNewname"
-            android:hint="name"
-            android:layout_width="332dp"
-            android:layout_height="61dp"
-            android:layout_marginTop="160dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/addItemProgress"
+                style="@style/SpinKitView.Large.Wave"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="hint" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="146dp"
+                android:layout_marginEnd="188dp"
+                android:visibility="invisible"
+                android:layout_marginTop="14dp"
+                app:SpinKit_Color="@color/pinkred" />
+
+            <Button
+                android:id="@+id/addNewbutton"
+                android:layout_width="143dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="129dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="163dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/welcome_button"
+                android:onClick="addToFirebase"
+                android:paddingLeft="30dp"
+                android:paddingTop="15dp"
+                android:paddingRight="30dp"
+                android:paddingBottom="15dp"
+                android:text="Button" />
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 
 </FrameLayout>

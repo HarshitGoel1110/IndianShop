@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -62,7 +64,6 @@ public class AllShops extends Fragment implements AllShopFirestoreAdapter.OnList
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
         firebaseFirestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
@@ -70,10 +71,14 @@ public class AllShops extends Fragment implements AllShopFirestoreAdapter.OnList
         //Query
         Query query = firebaseFirestore.collection("shop");
 
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(8)
+                .setPageSize(3)
+                .build();
 
 //        recycler Options
-        FirestoreRecyclerOptions<AllShopsModel> options = new FirestoreRecyclerOptions.Builder<AllShopsModel>()
-                .setQuery(query , AllShopsModel.class)
+        FirestorePagingOptions<AllShopsModel> options = new FirestorePagingOptions.Builder<AllShopsModel>()
+                .setQuery(query , config , AllShopsModel.class)
                 .build();
 
         adapter = new AllShopFirestoreAdapter(options , this);
@@ -100,7 +105,7 @@ public class AllShops extends Fragment implements AllShopFirestoreAdapter.OnList
     public void onStop() {
         super.onStop();
         adapter.stopListening();
-        Toast.makeText(getContext(), "stopped", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "stopped", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -114,7 +119,6 @@ public class AllShops extends Fragment implements AllShopFirestoreAdapter.OnList
         super.onDestroy();
         fragmentManager = getFragmentManager();
         fragmentManager.popBackStack(null , FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        DatabaseHelper db = new DatabaseHelper(getContext());
         System.exit(0);
     }
 
@@ -124,6 +128,7 @@ public class AllShops extends Fragment implements AllShopFirestoreAdapter.OnList
         fragmentManager = getFragmentManager();
         Bundle bundle = new Bundle();
         bundle.putString("shop uid" , documentSnapshot.getId());
+        bundle.putString("shop name" , documentSnapshot.getString("name"));
         DisplayProductToUser displayProductToUser = new DisplayProductToUser();
         displayProductToUser.setArguments(bundle);
         fragmentManager.beginTransaction().replace(R.id.homeActivityFrame , displayProductToUser , null).addToBackStack(null).commit();

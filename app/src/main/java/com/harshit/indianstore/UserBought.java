@@ -3,7 +3,6 @@ package com.harshit.indianstore;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,14 +17,17 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firestore.v1.StructuredQuery;
 
-public class DisplayProductToUser extends Fragment implements AllProductFirestoreAdapter.OnListItemClick {
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class UserBought extends Fragment implements UserProductHistoryFirestoreAdapter.OnListItemClick {
 
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth mAuth;
@@ -35,22 +37,18 @@ public class DisplayProductToUser extends Fragment implements AllProductFirestor
 
     RecyclerView recyclerView;
 
-
-    String shopId = "";
-    String shopName = "";
-
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private String mParam1;
     private String mParam2;
 
-    public DisplayProductToUser() {
+    public UserBought() {
         // Required empty public constructor
     }
 
-    public static DisplayProductToUser newInstance(String param1, String param2) {
-        DisplayProductToUser fragment = new DisplayProductToUser();
+    public static UserBought newInstance(String param1, String param2) {
+        UserBought fragment = new UserBought();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -71,35 +69,34 @@ public class DisplayProductToUser extends Fragment implements AllProductFirestor
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.fragment_display_product_to_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_bought, container, false);
+
+        // Inflate the layout for this fragment
+        recyclerView = view.findViewById(R.id.userBoughtRecyclerView);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
 
-        Bundle bundle = this.getArguments();
-        shopId = bundle.getString("shop uid");
-        shopName = bundle.getString("shop name");
-
         //Query
-        Query query = firebaseFirestore.collection("shop")
-                .document(shopId).collection("product");
+        Query query = firebaseFirestore.collection("users")
+                .document(mUser.getUid()).collection("bought").orderBy("timestamp" , Query.Direction.DESCENDING);
 
         PagedList.Config config = new PagedList.Config.Builder()
-                .setInitialLoadSizeHint(8)
-                .setPageSize(3)
+                .setInitialLoadSizeHint(10)
+                .setPageSize(5)
                 .build();
+
+
 
 //        recycler Options
-        FirestorePagingOptions<ProductsModel> options = new FirestorePagingOptions.Builder<ProductsModel>()
-                .setQuery(query , config , ProductsModel.class)
+        FirestorePagingOptions<ProductHistoryModel> options = new FirestorePagingOptions.Builder<ProductHistoryModel>()
+                .setQuery(query , config , ProductHistoryModel.class)
                 .build();
 
-        adapter = new AllProductFirestoreAdapter(options , this);
+        adapter = new UserProductHistoryFirestoreAdapter(options , this , getContext());
 
-        recyclerView = view.findViewById(R.id.displayToUserRecyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -122,22 +119,17 @@ public class DisplayProductToUser extends Fragment implements AllProductFirestor
 
     @Override
     public void onItemClick(DocumentSnapshot snapshot, int position) {
-        Toast.makeText(getContext(), "selected", Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
+        HashMap<String , ArrayList<Object>> product = (HashMap<String , ArrayList<Object>>)snapshot.get("product");
+        DisplayBillToTheShop displayBillToTheShop = new DisplayBillToTheShop();
         Bundle bundle = new Bundle();
-        bundle.putString("shopName" , shopName);
-        bundle.putString("shopId" , shopId);
-        bundle.putString("productId" , snapshot.getId());
-        bundle.putString("desc" , snapshot.getString("description"));
-        bundle.putString("name" , snapshot.getString("name"));
-        bundle.putInt("price" , Integer.parseInt(snapshot.getString("price")));
-        bundle.putString("image" , snapshot.getString("image"));
-
-        DisplayProductLast displayProductLast = new DisplayProductLast();
-        displayProductLast.setArguments(bundle);
-
-        getFragmentManager().beginTransaction().replace(R.id.homeActivityFrame , displayProductLast , null).addToBackStack(null).commit();
-
-
+        bundle.putBoolean("byShop" , false);
+        bundle.putSerializable("bill" , product);
+        bundle.putString("userId" , mUser.getUid());
+        bundle.putString("shopId" , snapshot.getString("shop"));
+        bundle.putString("documentId" , snapshot.getId());
+        bundle.putBoolean("isDelivered" , snapshot.getBoolean("delivered"));
+        displayBillToTheShop.setArguments(bundle);
+        getFragmentManager().beginTransaction().replace(R.id.homeActivityFrame , displayBillToTheShop , null).addToBackStack(null).commit();
     }
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,16 +16,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.HashMap;
 
 class RecyclerInnerCartAdapter extends RecyclerView.Adapter<RecyclerInnerCartAdapter.CartInnerViewHolder> {
 
     Context context;
-    HashMap<String , MyCartView.Combine> innerData;
+    RecyclerView outerRecyclerView;
+    String shopId;
+    HashMap<String , HashMap<String , MyCartView.Combine>> data;
+    HashMap<String , String> shopIdToShopName;
 
-    public RecyclerInnerCartAdapter(Context context, HashMap<String, MyCartView.Combine> innerData) {
+    public RecyclerInnerCartAdapter(Context context, RecyclerView outerRecyclerView
+            , String shopId , HashMap<String , HashMap<String , MyCartView.Combine>> data , HashMap<String , String> shopIdToShopName) {
         this.context = context;
-        this.innerData = innerData;
+        this.outerRecyclerView = outerRecyclerView;
+        this.shopId = shopId;
+        this.data = data;
+        this.shopIdToShopName = shopIdToShopName;
     }
 
     @NonNull
@@ -38,22 +48,27 @@ class RecyclerInnerCartAdapter extends RecyclerView.Adapter<RecyclerInnerCartAda
     public void onBindViewHolder(@NonNull CartInnerViewHolder holder, int position) {
         String name = "";
         int price = 0;
+        String image = "";
+
         int count = 0;
-        for(String i:innerData.keySet()){
+
+        for(String i:data.get(shopId).keySet()){
             if(count == position){
-                name = innerData.get(i).name;
-                price = innerData.get(i).price;
+                name = data.get(shopId).get(i).name;
+                price = data.get(shopId).get(i).price;
+                image = data.get(shopId).get(i).image;
                 break;
             }
             count++;
         }
         holder.productName.setText(name);
         holder.price.setText(Integer.toString(price));
+        Picasso.get().load(image).fit().centerCrop().into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return innerData.size();
+        return data.get(shopId).size();
     }
 
     public class CartInnerViewHolder extends RecyclerView.ViewHolder{
@@ -62,7 +77,7 @@ class RecyclerInnerCartAdapter extends RecyclerView.Adapter<RecyclerInnerCartAda
         TextView productName;
         TextView price;
         EditText quantity;
-        Button delete;
+        ImageButton delete;
 
         public CartInnerViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -108,13 +123,15 @@ class RecyclerInnerCartAdapter extends RecyclerView.Adapter<RecyclerInnerCartAda
         private void deleteIt(int position) {
             int count = 0;
             DatabaseHelper db = new DatabaseHelper(context);
-//            notifyItemRangeChanged(0 , innerData.size()-1);
-            for(String i:innerData.keySet()){
+            for(String i:data.get(shopId).keySet()){
                 if(count == position){
-                    if(db.deleteRow(i)) {
-                        innerData.remove(i);
+                    if(data.get(shopId).size() == 1){
+                        Toast.makeText(context, "Please click the delete button available under shop to delete", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if(db.deleteRowByProductId(i)) {
+                        data.get(shopId).remove(i);
                         notifyItemRemoved(position);
-                        notifyDataSetChanged();
                     }
                     else{
                         Toast.makeText(context, "Some Error occurred while deleting", Toast.LENGTH_SHORT).show();
@@ -131,11 +148,12 @@ class RecyclerInnerCartAdapter extends RecyclerView.Adapter<RecyclerInnerCartAda
             // this will update the quantity for the inner data variable and
             // due to reference the value of data in the outer class will also change automatically
             int count = 0;
-            for(String i:innerData.keySet()){
+            for(String i:data.get(shopId).keySet()){
                 if(count == position){
-                    innerData.get(i).quantity = value;
+                    data.get(shopId).get(i).quantity = value;
                     break;
                 }
+                count++;
             }
 
         }

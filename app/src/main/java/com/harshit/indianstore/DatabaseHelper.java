@@ -17,10 +17,12 @@ class DatabaseHelper extends SQLiteOpenHelper {
     // id will be our column 0
     static final String PRODUCT_ID = "productId"; // column 1
     static final String SHOP_ID = "shopId";// 2
-    static final String PRICE = "price";// 4
-    static final String PRODUCT_NAME = "productName";// 3
-    static final String QUANTITY = "quantity";// 5
-    static final String Image = "image";// not set used
+    static final String SHOP_NAME = "shopName"; // 3
+
+//    static final String PRICE = "price";// 5
+//    static final String PRODUCT_NAME = "productName";// 4
+//    static final String QUANTITY = "quantity";// 6
+//    static final String IMAGE = "image";// 7
 
 
 
@@ -30,7 +32,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT , productId TEXT , shopId TEXT , productName TEXT , price INTEGER , quantity INTEGER)");
+        db.execSQL("create table " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT , productId TEXT , shopId TEXT , shopName TEXT)");
     }
 
     @Override
@@ -39,19 +41,31 @@ class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertData(String id , String shopId , String name , int price){
+    public boolean insertData(String id , String shopId , String shopName){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(PRODUCT_ID , id);
         contentValues.put(SHOP_ID , shopId);
-        contentValues.put(PRODUCT_NAME , name);
-        contentValues.put(PRICE , price);
-        contentValues.put(QUANTITY , 1);
+        contentValues.put(SHOP_NAME , shopName);
+
+//        contentValues.put(PRODUCT_NAME , name);
+//        contentValues.put(PRICE , price);
+//        contentValues.put(QUANTITY , 1);
+//        contentValues.put(IMAGE , image);
+
         long result =  db.insert(TABLE_NAME , null , contentValues);
         if(result == -1l)
             return false;
         return true;
+    }
+
+    public boolean getCount(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME , null);
+        if(cursor.getCount()<20)
+            return true;
+        return false;
     }
 
     public Cursor getAllData(){
@@ -66,18 +80,27 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
 //        Log.d("select Query" , selectQuery);
 
-        Cursor findEntry = db.query("ourCart", new String[] {PRODUCT_NAME}, "productId=?", new String[] { pId }, null, null, null);
+        Cursor findEntry = db.query("ourCart", new String[] {PRODUCT_ID}, "productId=?", new String[] { pId }, null, null, null);
 
         if(findEntry.getCount() == 0)
             return false;
         return true;
     }
 
-    public boolean deleteRow(String productId){
+    public boolean deleteRowByProductId(String productId){
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.delete(TABLE_NAME, PRODUCT_ID + "=?", new String[]{productId});
         if(result > 0)
             return true;
         return false;
     }
+
+    public boolean deleteRowByShopId(String shopId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(TABLE_NAME, SHOP_ID + "=?", new String[]{shopId});
+        if(result > 0)
+            return true;
+        return false;
+    }
+
 }

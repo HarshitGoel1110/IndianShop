@@ -14,6 +14,43 @@
         $("#header").load("header.html");
     });
   </script>
+    <style>
+        label:after {
+        content: '+';
+        position: absolute;
+        right: 1em;
+        color: #fff;
+        }
+
+        input:checked + label:after {
+        content: '-';
+        line-height: .8em;
+        }
+
+        .accordion__content{
+        max-height: 0em;
+        transition: all 0.4s cubic-bezier(0.865, 0.14, 0.095, 0.87);
+        }
+        input[name='panel']:checked ~ .accordion__content {
+        max-height: 50em;
+        }
+
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+    </style>
 </head>
 <body>
   <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
@@ -36,6 +73,8 @@
     firebase.initializeApp(firebaseConfig);
     const db=firebase.firestore();
     const auth = firebase.auth();
+    var user1=auth.W;
+
 
   </script>
 
@@ -49,14 +88,20 @@
 
       <div id="footer"></div>
 
+
+  <div class="container px-5 py-24 mx-auto">
+          <h1 class="text-2xl font-medium text-gray-900 title-font mb-2">Pending Order</h1>
+          <div class="-my-8 pending-order">
+          </div>
+
+          <h1 class="text-2xl font-medium text-gray-900 title-font mb-2 -my-15">Completed Order</h1>
+          <div class="-my-8 ordered-delivered">
+
+          </div>
+  </div>
+
+
       <script src="bill.js"></script>
-
-  Your order
-  <div class="Order Pending">
-  </div>
-
-  <div class="order plased">
-  </div>
 
 </body>
 </html>

@@ -55,6 +55,7 @@ signupForm.addEventListener('submit', (e) => {
     auth.signOut();
   }).then(() => {
     // close the signup modal & reset form
+    location.reload();
     signupForm.reset();
   });
 });
@@ -66,6 +67,7 @@ const logout = document.querySelector('#logout');
 logout.addEventListener('click', (e) => {
 e.preventDefault();
 auth.signOut().then(() => {
+  window.location.replace("index.html");
   console.log('user signed out');
 })
 });

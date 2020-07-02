@@ -15,7 +15,16 @@ function func(key)
     return true;
 }
 
+function emptyCart()
+{
+    if(document.querySelector('.modal-body').innerText=="")
+    {
+        document.querySelector('.modal-body').innerHTML=`<div class="Empty-Cart">Cart Empty</div>`;
+    }
 
+}
+
+emptyCart();
 
 var head=document.querySelector('.cart_head');
 var bodyhtml='',html='';
@@ -72,7 +81,7 @@ for (var key in w) {
                     db.collection('shop/'+keyx+'/product').doc(key1).get().then(pro=>{
     //                html=`<div><h3>${pro.data().name}   Price:${pro.data().price}</h3><div>${pro.data().description}</div><br></div>`;
                     var x=JSON.parse(w[wer])
-                    utr[pro.id]=pro.data().price;
+                     utr[pro.id]=pro.data().price;
 //                    console.log(pro);
                     name_product[pro.id]=pro.data().name;
                     html=`
@@ -134,6 +143,7 @@ for (var key in w) {
 
                             print[wer]+=html;
                             console.log("printyes",wer);
+                            document.querySelector('.Empty-Cart').innerHTML='';
                             ad.innerHTML+=print[wer];
                             console.log(wer,utr);
 
@@ -183,7 +193,7 @@ for (var key in w) {
                                             sans();
                                             document.querySelector('#view-'+qw[1]+'-'+qw[2]).style.display='none';;
                                         }
-
+                                        emptyCart();
                                         console.log(wer);
 
                                     })
@@ -232,6 +242,7 @@ for (var key in w) {
                                                  console.log(doc);
                                                  doc.style.display='none';
                                                  });
+                                 emptyCart();
                                  alert(`Product  Bought  from shop ${shop_id}`);
                             })
 
@@ -255,6 +266,10 @@ for (var key in w) {
                                 document.querySelector('#total-'+($(this).parent()[0].id)).innerHTML=val*parseInt(child.html());
                                 sans();
                               });
+
+
+
+
 
                               $(".qt-minus").click(function(){
 

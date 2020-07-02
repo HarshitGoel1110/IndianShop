@@ -1,13 +1,15 @@
 const loggedOutLinks = document.querySelectorAll('.logged-out');
 const loggedInLinks = document.querySelectorAll('.logged-in');
 const accountDetails = document.querySelector('.account-details');
-const create = document.querySelector('.create');
+const create = document.querySelectorAll('.create');
 const view = document.querySelectorAll('.view');
 
 
 
 const setupUI = (user) => {
   if (user) {
+    loggedInLinks.forEach(item => item.style.display = 'block');
+    loggedOutLinks.forEach(item => item.style.display = 'none');
     // account info
     db.collection('users').doc(user.uid).get().then(doc => {
       const html = `
@@ -23,27 +25,23 @@ const setupUI = (user) => {
     shop=doc.data().shop;
          if(shop==false)
         {
-            create.style.display='block';
+            create.forEach(item => item.style.display='block');
             view.forEach(item => item.style.display = 'none');
         }
         else
         {
-            create.style.display='none';
+            create.forEach(item => item.style.display='none');
             view.forEach(item => item.style.display = 'block');
             document.getElementById("qwe").href = `pro.html?name=${user.uid}`;
         }
     });
-    loggedInLinks.forEach(item => item.style.display = 'block');
-    loggedOutLinks.forEach(item => item.style.display = 'none');
   }
   else {
+    loggedInLinks.forEach(item => item.style.display = 'none');
+    loggedOutLinks.forEach(item => item.style.display = 'block');
     // clear account info
     accountDetails.innerHTML = '';
     // toggle user elements
-    create.style.display='none';
-    view.style.display='none';
-    loggedInLinks.forEach(item => item.style.display = 'none');
-    loggedOutLinks.forEach(item => item.style.display = 'block');
     localStorage.clear();
   }
 };

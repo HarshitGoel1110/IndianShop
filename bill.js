@@ -1,11 +1,9 @@
-var myParam=auth['W'];
-var ui=firebase.auth().currentUser.uid;
-console.log(myParam,auth,ui);
 var qw=document.querySelector('.pending-order');
 var qw1=document.querySelector('.ordered-delivered');
 var html,headhtml;
 var countsnap=0;
-db.collection('shop/'+myParam+'/purchased').get().then((snapshot) => {
+firebase.auth().onAuthStateChanged(user => {
+db.collection('shop/'+ firebase.auth().currentUser.uid +'/purchased').get().then((snapshot) => {
         snapshot.docs.forEach(doc => {
             var date=new Date(parseInt(doc.id));
             var d1=date.toDateString(),t1=date.toLocaleTimeString();
@@ -97,7 +95,7 @@ db.collection('shop/'+myParam+'/purchased').get().then((snapshot) => {
                             document.querySelectorAll('.button-click').forEach(but=>{
                                 but.addEventListener("click",()=>{
                                      var id1=(but.id).split("-")[1];
-                                    db.collection("shop/"+myParam+'/purchased').doc(id1).update({
+                                    db.collection("shop/"+ firebase.auth().currentUser.uid +'/purchased').doc(id1).update({
                                         delivered:true
                                     })
                                     db.collection("users/"+doc.data().user+'/bought').doc(id1).update({
@@ -125,3 +123,5 @@ db.collection('shop/'+myParam+'/purchased').get().then((snapshot) => {
             )
 
     })
+
+  });

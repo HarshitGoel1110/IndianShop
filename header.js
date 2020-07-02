@@ -2,7 +2,7 @@ const loggedOutLinks = document.querySelectorAll('.logged-out');
 const loggedInLinks = document.querySelectorAll('.logged-in');
 const accountDetails = document.querySelector('.account-details');
 const create = document.querySelector('.create');
-const view = document.querySelector('.view');
+const view = document.querySelectorAll('.view');
 
 
 
@@ -24,12 +24,12 @@ const setupUI = (user) => {
          if(shop==false)
         {
             create.style.display='block';
-            view.style.display='none';
+            view.forEach(item => item.style.display = 'none');
         }
         else
         {
             create.style.display='none';
-            view.style.display='block';
+            view.forEach(item => item.style.display = 'block');
             document.getElementById("qwe").href = `pro.html?name=${user.uid}`;
         }
     });

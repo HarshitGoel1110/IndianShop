@@ -59,7 +59,7 @@ function dispProduct(product,idpro,user)
     html=`
     <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
         <a class="block relative h-48 rounded overflow-hidden">
-        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="${product.image}">
+        <img alt="ecommerce" class="object-contain object-center w-full h-full block" src="${product.image}">
         </a>
         <div class="mt-4">
 

@@ -30,6 +30,8 @@ var head=document.querySelector('.cart_head');
 var bodyhtml='',html='';
 var foothtml='',headhtml='';
 var print={};
+var countx={};
+
 for (var key in w) {
       if (w.hasOwnProperty(key) && key!="size" && func(key)) {
 //        html=html+" "+"shop"+" "+key;
@@ -65,6 +67,7 @@ for (var key in w) {
                   `;
                  console.log("firstprint",keyx);
               print[keyx]=html;
+              countx[keyx]=0;
 
           }).then(()=>{
                    var final;
@@ -79,51 +82,79 @@ for (var key in w) {
                     if (x.hasOwnProperty(key1)) {
                     var wer=keyx;
                     db.collection('shop/'+keyx+'/product').doc(key1).get().then(pro=>{
+                       if(!pro.data())
+                       {
+                            var p1=JSON.parse(localStorage.getItem(wer));
+                            delete p1[pro.id];
+                            console.log('p1:',p1);
+                            if(Object.keys(p1).length==0)
+                            {
+                                   localStorage.removeItem(wer);
+                                   localStorage.removeItem(wer+'-item');
+                                   localStorage.removeItem(wer+-'name');
+
+                            }
+                            else
+                            {
+                                   p1=JSON.stringify(p1);
+                                   localStorage.setItem(wer,p1);
+                            }
+                       }
+
     //                html=`<div><h3>${pro.data().name}   Price:${pro.data().price}</h3><div>${pro.data().description}</div><br></div>`;
-                    var x=JSON.parse(w[wer])
-                     utr[pro.id]=pro.data().price;
-//                    console.log(pro);
-                    name_product[pro.id]=pro.data().name;
-                    html=`
-                    <table class="table table-image remove-${wer}" id='view-${wer}-${pro.id}'>
-                    <tbody>
-                      <tr>
-                        <td class="w-25">
-                          <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/vans.png" class="img-fluid img-thumbnail" alt="Sheep">
-                        </td>
-                        <td>${pro.data().name}</td>
-                        <td class='price-${wer}-${pro.id}'>${pro.data().price}</td>
-                        <td id='${wer}-${pro.id}'>
-                        <span class="qt-plus">+</span>
-                        <span class="qt">${x[pro.id]} </span>
-                        <span class="qt-minus">-</span>
-                        </td>
+                    else
+                    {
+                        var x=JSON.parse(w[wer])
+                         utr[pro.id]=pro.data().price;
+    //                    console.log(pro);
+                        name_product[pro.id]=pro.data().name;
+                        html=`
+                        <table class="table table-image remove-${wer}" id='view-${wer}-${pro.id}'>
+                        <tbody>
+                          <tr>
+                            <td class="w-25">
+                              <img src="${pro.data().image}" class="img-fluid img-thumbnail" alt="Sheep">
+                            </td>
+                            <td>${pro.data().name}</td>
+                            <td class='price-${wer}-${pro.id}'>${pro.data().price}</td>
+                            <td id='${wer}-${pro.id}'>
+                            <span class="qt-plus">+</span>
+                            <span class="qt">${x[pro.id]} </span>
+                            <span class="qt-minus">-</span>
+                            </td>
 
-                        <td><div class="total"><div id="total-${wer}-${pro.id}">${pro.data().price}*${x[pro.id]}</div></td>
+                            <td><div class="total"><div id="total-${wer}-${pro.id}">${pro.data().price}*${x[pro.id]}</div></td>
 
-                        <td>
-                          <a href="#" class="btn btn-danger btn-sm delete" id='delete-${wer}-${pro.id}'>
-                            <i class="fa fa-times"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                    </table>
+                            <td>
+                              <a href="#" class="btn btn-danger btn-sm delete" id='delete-${wer}-${pro.id}'>
+                                <i class="fa fa-times"></i>
+                              </a>
+                            </td>
+                          </tr>
+                        </tbody>
+                        </table>
 
-                    `;
-                    price=parseInt(pro.data().price);
+                        `;
+                        price=parseInt(pro.data().price);
 
-                    print[wer]+=html;
-                    window.localStorage.setItem(wer+'-item',JSON.stringify(utr));
-                    window.localStorage.setItem(wer+'-name',JSON.stringify(name_product));
+                        print[wer]+=html;
+                        countx[wer]++;
+                        window.localStorage.setItem(wer+'-item',JSON.stringify(utr));
+                        window.localStorage.setItem(wer+'-name',JSON.stringify(name_product));
+                    }
+
                     }).then(()=>{
 
 
-                        total+=price;
-                        final=total;
-                        count++;
-                        console.log(count,wer,JSON.parse(w[wer]));
-                        if(count==Object.keys(JSON.parse(w[wer])).length)
+                        if(price)
+                        {
+                            total+=price;
+                            final=total  ;
+                            count++;
+                        }
+
+                        console.log("look",countx[wer],count,wer,Object.keys(JSON.parse(w[wer])).length);
+                        if(countx[wer]==Object.keys(JSON.parse(w[wer])).length && count!=0)
                         {
                             console.log(wer);
                             html=`
@@ -145,7 +176,7 @@ for (var key in w) {
                             console.log("printyes",wer);
                             document.querySelector('.Empty-Cart').innerHTML='';
                             ad.innerHTML+=print[wer];
-                            console.log(wer,utr);
+//                            console.log(wer,utr,print[wer]);
 
                             document.querySelectorAll('.total').forEach(doc=>{
                               var x=doc.children[0].id.split("-");
@@ -175,11 +206,12 @@ for (var key in w) {
                                     doc.addEventListener('click',()=>{
                                         qw=(doc.id.split("-"));
                                         var wer=JSON.parse(localStorage.getItem(qw[1]));
-                                        delete wer[qw[2]]
+                                        delete wer[qw[2]];
                                         if(Object.keys(wer).length==0)
                                         {
                                            localStorage.removeItem(qw[1]);
                                            localStorage.removeItem(qw[1]+'-item');
+                                           localStorage.removeItem(qw[1]+-'name');
                                             document.querySelector('#view-'+qw[1]+'-'+qw[2]).style.display='none';;
                                             document.querySelectorAll('.remove-'+qw[1]).forEach(doc=>{
                                                  console.log(doc);
@@ -224,14 +256,16 @@ for (var key in w) {
                                    db.collection('shop/'+shop_id+'/purchased').doc(timestamp).set({
                                     user:auth.W,
                                     product:qw,
-                                    status:false
+                                    delivered:false,
+                                    timestamp:timestamp
 
                                    });
 
                                  db.collection('users/'+auth.W+'/bought').doc(timestamp).set({
                                     shop:shop_id,
                                     product:qw,
-                                    delivered:false
+                                    delivered:false,
+                                    timestamp:timestamp
                                  }
                                  );
 

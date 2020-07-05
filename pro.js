@@ -51,6 +51,15 @@ function dispProduct(product,idpro,user)
         <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">${product.description}</h3>
         <h2 class="text-gray-900 title-font text-lg font-medium">${product.name}</h2>
         <p class="mt-1">₹ ${product.price}</p>
+        <div class="dropdown inline-block relative">
+          <button class="bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center">
+            <span class="mr-1">Options</span>
+          </button>
+          <ul class="dropdown-menu absolute hidden text-gray-700 pt-1">
+            <li><a class="modal-open rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" data-toggle="modal" data-target="modal-product">Edit</a></li>
+            <li><a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="#">Delete</a></li>
+          </ul>
+        </div>
         </div>
     </div>
 	`;

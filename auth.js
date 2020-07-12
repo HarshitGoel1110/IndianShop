@@ -57,6 +57,8 @@ signupForm.addEventListener('submit', (e) => {
     // close the signup modal & reset form
     location.reload();
     signupForm.reset();
+  }).catch(err => {
+    alert(err.message);
   });
 });
 
@@ -68,7 +70,7 @@ logout.addEventListener('click', (e) => {
 e.preventDefault();
 auth.signOut().then(() => {
   window.location.replace("index.html");
-  console.log('user signed out');
+  alert('Successfully, logged out !!!');
 })
 });
 
@@ -90,6 +92,8 @@ auth.signInWithEmailAndPassword(email, password).then((user) => {
     alert("Verify your email first and try logging in...");
   }
   loginForm.reset();
+}).catch(err => {
+  alert(err.message);
 });
 
 });

@@ -57,7 +57,7 @@ function dispProduct(product,idpro,user)
           </button>
 
 
-          <button class="bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center edit_yes45" id="edit1-${user}-${idpro}" >
+          <button class="bg-red-500 text-black font-semibold py-2 px-4 rounded inline-flex items-center edit_yes45" id="edit1-${user}-${idpro}" >
             <span class="mr-1">Delete</span>
           </button>
         </div>

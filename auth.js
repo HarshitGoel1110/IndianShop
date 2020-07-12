@@ -50,6 +50,7 @@ signupForm.addEventListener('submit', (e) => {
     db.collection('users').doc(cred.user.uid).set({
       name: signupForm['signup-name'].value,
       mobileno: signupForm['signup-mobileno'].value,
+      address: signupForm['signup-address'].value,
       shop: false
     });
     auth.signOut();

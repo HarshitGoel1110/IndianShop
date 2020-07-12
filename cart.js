@@ -19,7 +19,7 @@ function emptyCart()
 {
     if(document.querySelector('.modal-body').innerText=="")
     {
-        document.querySelector('.modal-body').innerHTML=`<div class="Empty-Cart">Cart Empty</div>`;
+        document.querySelector('.modal-body').innerHTML=`<div class="Empty-Cart">Your Cart is Empty</div>`;
     }
 
 }
@@ -45,7 +45,7 @@ for (var key in w) {
                   html=`
               <div class="modal-header border-bottom-0   remove-${doc.id}">
                   <h5 class="modal-title" id="exampleModalLabel">
-                    ${name}
+                    <span class="name-${doc.id}">${name}</span>
                   </h5>
 
               </div>
@@ -236,8 +236,31 @@ for (var key in w) {
 
                             sans();
                             window.localStorage.setItem(wer+'-item',JSON.stringify(utr));
-                            $('.buy_shop').click(function(){
-                                var shop_id=this.id.split("-")[1];
+                            $('.buy_shop').click(buy_item1)
+                                function buy_item1(){
+                                         var shop=document.querySelector(".name-"+this.id.split("-")[1]).innerHTML;
+                                         Swal.fire({
+                                            title: 'Are you sure?',
+                                            text: `Do you want to buy item from ${shop}`,
+                                            icon: 'info',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Yes, Buy!'
+                                            }).then((result) => {
+                                            if (result.value) {
+                                                buy_item(this.id);
+                                                Swal.fire(
+                                                'Successfully purchased',
+                                                `Your products are successfully purchased from ${shop}`,
+                                                'success'
+                                                )
+
+                                            }
+                                            })
+                                }
+                                function buy_item(x){
+                                var shop_id=x.split("-")[1];
                                 console.log(shop_id,"clicked",auth.W);
                                 var quantity=JSON.parse(localStorage.getItem(shop_id));
                                 var name1=JSON.parse(localStorage.getItem(shop_id+'-name'));
@@ -277,8 +300,7 @@ for (var key in w) {
                                                  doc.style.display='none';
                                                  });
                                  emptyCart();
-                                 alert(`Product  Bought  from shop ${shop_id}`);
-                            })
+                            }
 
 
 

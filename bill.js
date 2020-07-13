@@ -3,9 +3,10 @@ var qw1=document.querySelector('.ordered-delivered');
 var html,headhtml;
 var countsnap=0;
 firebase.auth().onAuthStateChanged(user => {
-db.collection('shop/'+ firebase.auth().currentUser.uid +'/purchased').get().then((snapshot) => {
+db.collection('shop/'+ firebase.auth().currentUser.uid +'/purchased').orderBy('timestamp').get().then((snapshot) => {
         snapshot.docs.forEach(doc => {
             var date=new Date(parseInt(doc.id));
+            var deliverery_address=doc.data().address;
             var d1=date.toDateString(),t1=date.toLocaleTimeString();
             db.collection('users').doc(doc.data().user).get().then(doc1=>{
 
@@ -18,9 +19,9 @@ db.collection('shop/'+ firebase.auth().currentUser.uid +'/purchased').get().then
                 <div class="mt-1 text-gray-500 text-sm">${t1}</div>
               </div>
               <div class="md:flex-grow">
-                <h2 class="text-2xl font-medium text-gray-900 title-font mb-2">${doc1.data().name}</h2>
-                <p class="leading-relaxed"><strong>ADDRESS</strong> - Address</p>
-                <p class="leading-relaxed"><strong>PHONE NO.</strong> ${doc1.data().mobileno}</p>
+                <h2 class="text-2xl font-medium text-gray-900 title-font mb-2"><strong>Customer Name -</strong> ${doc1.data().name}</h2>
+                <p class="leading-relaxed"><strong>Delivery Address -</strong>${deliverery_address}</p>
+                <p class="leading-relaxed"><strong>Customer Phone No.</strong> ${doc1.data().mobileno}</p>
                 <br>
                 <p>Click to view the bill</p>
                 <br>

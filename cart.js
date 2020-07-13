@@ -1,3 +1,5 @@
+firebase.auth().onAuthStateChanged(user => {
+if(user){
 
 var w=window.localStorage;
 var i;
@@ -31,7 +33,9 @@ var bodyhtml='',html='';
 var foothtml='',headhtml='';
 var print={};
 var countx={};
-
+db.collection('users').doc(user.uid).get().then(doc=>{
+      document.querySelector(".address-user").innerHTML=(doc.data().address);
+})
 for (var key in w) {
       if (w.hasOwnProperty(key) && key!="size" && func(key)) {
 //        html=html+" "+"shop"+" "+key;
@@ -238,28 +242,44 @@ for (var key in w) {
                             window.localStorage.setItem(wer+'-item',JSON.stringify(utr));
                             $('.buy_shop').click(buy_item1)
                                 function buy_item1(){
-                                         var shop=document.querySelector(".name-"+this.id.split("-")[1]).innerHTML;
-                                         Swal.fire({
-                                            title: 'Are you sure?',
-                                            text: `Do you want to buy item from ${shop}`,
-                                            icon: 'info',
+                                        (async () => {
+                                        var shop=document.querySelector(".name-"+this.id.split("-")[1]).innerHTML;
+                                        var inputValue=document.querySelector('.address-user').innerHTML;
+
+                                        const { value: ipAddress } = await Swal.fire({
+                                          title: 'Are you sure?',
+
+                                          html: `Do you want to buy item from <strong>${shop}</strong><br><br>
+                                                 Enter the delivery address`,
+
+                                          input: 'text',
+                                          inputValue: inputValue,
+                                          icon: 'info',
                                             showCancelButton: true,
                                             confirmButtonColor: '#3085d6',
                                             cancelButtonColor: '#d33',
-                                            confirmButtonText: 'Yes, Buy!'
-                                            }).then((result) => {
-                                            if (result.value) {
-                                                buy_item(this.id);
-                                                Swal.fire(
-                                                'Successfully purchased',
-                                                `Your products are successfully purchased from ${shop}`,
-                                                'success'
-                                                )
-
+                                            confirmButtonText: 'Yes, Buy!',
+                                          inputValidator: (value) => {
+                                            if (!value) {
+                                                return 'You need to put your delivery address!';
                                             }
-                                            })
+                                          }
+                                        })
+
+                                        if (ipAddress) {
+                                          buy_item(this.id,ipAddress);
+                                          Swal.fire({
+                                             title:`Successfully bought from ${shop}`,
+                                             html:`Your address of delivery is <strong>${ipAddress}</strong><br> <br>
+                                             contact the shop for further details`,
+                                             icon:'success',
+                                          })
+                                        }
+
+                                        })()
+
                                 }
-                                function buy_item(x){
+                                function buy_item(x,address){
                                 var shop_id=x.split("-")[1];
                                 console.log(shop_id,"clicked",auth.W);
                                 var quantity=JSON.parse(localStorage.getItem(shop_id));
@@ -280,15 +300,16 @@ for (var key in w) {
                                     user:auth.W,
                                     product:qw,
                                     delivered:false,
-                                    timestamp:timestamp
-
+                                    timestamp:timestamp,
+                                     address:address
                                    });
 
                                  db.collection('users/'+auth.W+'/bought').doc(timestamp).set({
                                     shop:shop_id,
                                     product:qw,
                                     delivered:false,
-                                    timestamp:timestamp
+                                    timestamp:timestamp,
+                                    address:address
                                  }
                                  );
 
@@ -363,8 +384,6 @@ for (var key in w) {
 
       }
  }
+}
+})
 
-
-
-
-//function total()

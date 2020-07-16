@@ -12,14 +12,16 @@ const createForm = document.querySelector('#create-form');
 createForm.addEventListener('submit', (e) => {
 e.preventDefault();
 
-
+var timestamp=JSON.stringify(Date.now());
 db.collection('shop').doc(firebase.auth().currentUser.uid).set({
   name: createForm['storename'].value,
   address: createForm['address'].value,
   city: createForm['city'].value,
   pincode: createForm['pincode'].value,
-  mobile: createForm['mobileno'].value,
-  email: createForm['email'].value
+  mobile: createForm['mobile'].value,
+  email: createForm['email'].value,
+  timestamp:timestamp,
+
  }).then(() => {
     db.collection('users').doc(firebase.auth().currentUser.uid).update({
     shop:true
@@ -49,7 +51,7 @@ signupForm.addEventListener('submit', (e) => {
     });
     db.collection('users').doc(cred.user.uid).set({
       name: signupForm['signup-name'].value,
-      mobileno: signupForm['signup-mobileno'].value,
+      mobile: signupForm['signup-mobile'].value,
       address: signupForm['signup-address'].value,
       shop: false
     });
@@ -98,3 +100,20 @@ auth.signInWithEmailAndPassword(email, password).then((user) => {
 });
 
 });
+
+
+// reset password
+function forpass(){
+  var foremail = prompt("Please enter your email");
+  if (foremail != null) {
+    auth.sendPasswordResetEmail(foremail).then(function() {
+      alert("Email reset mail has been sent to " + foremail + ". Check your inbox !!!");
+    }).catch(function(error) {
+      alert(error.message);
+    });
+  }
+  else
+  {
+    alert("Enter a valid email !!!");
+  }
+}

@@ -12,13 +12,39 @@ const setupUI = (user) => {
     loggedOutLinks.forEach(item => item.style.display = 'none');
     // account info
     db.collection('users').doc(user.uid).get().then(doc => {
-      const html = `
+      if(doc.data().shop==true)
+      {
+            db.collection('shop').doc(user.uid).get().then(s1=>{
+                var date=new Date(parseInt(s1.data().timestamp));
+//            var deliverery_address=doc.data().address;
+            var d1=date.toDateString();
+                 const html = `
+                <div >Logged in as ${user.email}</div>
+                <div >Name: <span class="name_acc">${doc.data().name}</span></div>
+                <div >Mobile No: <span class="mobile_acc">${doc.data().mobile}</span></div>
+                <div>Address: <span class="address_acc">${doc.data().address}</span></div>
+                <div>Store Created: <span class="shop_created">${doc.data().shop}</span></div>
+                <div>Date of store creation: ${d1}</div>
+              `;
+               accountDetails.innerHTML = html;
+
+            }
+            )
+
+      }
+      else
+      {
+             const html = `
         <div >Logged in as ${user.email}</div>
         <div >Name: <span class="name_acc">${doc.data().name}</span></div>
-        <div >Mobile No: <span class="mobile_acc">${doc.data().mobileno}</span></div>
+        <div >Mobile No: <span class="mobile_acc">${doc.data().mobile}</span></div>
         <div>Address: <span class="address_acc">${doc.data().address}</span></div>
+        <div>Store Created: <span class="shop_created">${doc.data().shop}</span></div>
       `;
       accountDetails.innerHTML = html;
+      }
+
+
     });
     // toggle user UI elements
     var shop;
@@ -39,9 +65,9 @@ const setupUI = (user) => {
     document.querySelector('.setting-click').addEventListener("click",function(event){
        console.log("clicked");
        name=document.querySelector('.name_acc').innerHTML;
-       mobileno=document.querySelector('.mobile_acc').innerHTML;
+       mobile=document.querySelector('.mobile_acc').innerHTML;
        address=document.querySelector('.address_acc').innerHTML;
-       console.log(name,mobileno,address);
+       console.log(name,mobile,address);
        event.preventDefault();
             Swal.fire({
             title: 'Edit Your Details',
@@ -52,7 +78,7 @@ const setupUI = (user) => {
             </div>
             <div class="mb-4">
                 Mobile No
-              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="user-mobile" type="text" placeholder="package quantity gr/mL" value="${mobileno}">
+              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="user-mobile" type="text" placeholder="package quantity gr/mL" value="${mobile}">
             </div>
             <div class="mb-4">
                  Address
@@ -84,7 +110,7 @@ const setupUI = (user) => {
                 })
                 db.collection('users').doc(user.uid).update({
                   name: createprodForm['user-name'].value,
-                  mobileno: createprodForm['user-mobile'].value,
+                  mobile: createprodForm['user-mobile'].value,
                   address: createprodForm['user-address'].value
 
               }).then(() => {

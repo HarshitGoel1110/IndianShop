@@ -3,36 +3,122 @@
 var url = document.location.href;
 var myParam = location.search.split('name=')[1];
 const list=document.getElementById('displayproducts');
+function sans(){
+    console.log('clicked');
+    var owner_name=document.querySelector('.owner-name').innerHTML;
+    var shop_name=document.querySelector('.shop-name').innerHTML;
+    var shop_address=document.querySelector('.shop-address').innerHTML;
+    var shop_mobile=document.querySelector('.shop-mobile').innerHTML;
+    var myParam = location.search.split('name=')[1];
+    Swal.fire({
+            title: 'Edit Shop Details',
+            html:`<form id="shop-form" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                Shop Name
+              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="shop-name" type="text" placeholder="Product Name" value="${shop_name}">
+            </div>
+            <div class="mb-4">
+                Owner Name
+              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="owner-name" type="text" placeholder="Product Name" value="${owner_name}">
+            </div>
+
+            <div class="mb-4">
+                Mobile No
+              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="shop-mobile" type="text" placeholder="package quantity gr/mL" value="${shop_mobile}">
+            </div>
+            <div class="mb-4">
+                 Shop Address
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="shop-address" type="text" placeholder="99" value="${shop_address}">
+            </div>
+
+
+            </form>`,
+
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Edit it!'
+
+            }).then((result) => {
+
+            if (result.value) {
+            	const createprodForm = document.querySelector('#shop-form');
+
+//            	console.log("user",user.uid);
+//                console.log(createprodForm['product-name'].value);
+                Swal.fire(
+                'Edited! ',
+                'Your Shop is Edited.',
+                'success'
+                )
+                console.log(myParam);
+                db.collection('shop').doc(myParam).update({
+                    mobile:createprodForm['shop-mobile'].value,
+                    address: createprodForm['shop-address'].value,
+                    name:createprodForm['shop-name'].value,
+                })
+                db.collection('users').doc(myParam).update({
+                  name: createprodForm['owner-name'].value,
+                  mobile: createprodForm['shop-mobile'].value,
+
+              }).then(() => {
+                createprodForm.reset();
+                location.reload();
+              }).catch(err => {
+                console.log(err.message);
+              });
+            }
+            })
+}
 
 
 
 const lt=document.getElementById('storename');
 const cc=document.getElementById('contactcard');
+db.collection('users').doc(myParam).get().then(s1=>{
 db.collection('shop').doc(myParam).get().then(doc=>{
-	let ht=`<h1 class="sm:text-4xl text-2xl font-medium title-font mb-2 text-gray-900">${doc.data().name}</h1>`;
+
+	let ht=`
+
+	<h1 class="sm:text-4xl text-2xl font-medium title-font mb-2 text-gray-900">${doc.data().name}</h1>`;
   lt.innerHTML += ht;
-  let cch=`<div class="lg:w-2/3 md:w-1/2 bg-gray-300 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-start relative">
-  <iframe width="100%" height="100%" class="absolute inset-0" frameborder="0" title="map" marginheight="0" marginwidth="0" scrolling="no" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed" style="filter: grayscale(1) contrast(1.2) opacity(0.4);"></iframe>
-  <div class="bg-white relative flex flex-wrap py-6">
-    <div class="lg:w-1/2 px-6">
-      <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm">ADDRESS</h2>
-      <p class="leading-relaxed">${doc.data().address}</p>
+  let cch=`
+
+  <div class="lg:w-2/3 md:w-2/3 sm:w-2/3 bg-gray-300 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-start relative">
+
+    <div class="lg:w-1/2 md:w-1/1 sm:w-2/3 px-6">
+      <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm ">STORE NAME</h2>
+      <p class="leading-relaxed"><span class='shop-name'>${doc.data().name}</span></p>
+      <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mt-4">STORE OWNER NAME</h2>
+      <p class="leading-relaxed"><span class='owner-name'>${s1.data().name}</span></p>
+       <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mt-4">STORE ADDRESS</h2>
+      <p class="leading-relaxed"><span class='shop-address'>${doc.data().address}</span></p>
+      <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mt-4">STORE EMAIL</h2>
+      <a class="text-purple-500 leading-relaxed"><span class='shop-email'>${doc.data().email}</span></a>
+      <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mt-4">STORE PHONE</h2>
+      <p class="leading-relaxed"><span class='shop-mobile'>${doc.data().mobile}</span></p>
     </div>
-    <div class="lg:w-1/2 px-6 mt-4 lg:mt-0">
-      <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm">EMAIL</h2>
-      <a class="text-purple-500 leading-relaxed">${doc.data().email}</a>
-      <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mt-4">PHONE</h2>
-      <p class="leading-relaxed">${doc.data().mobile}</p>
-    </div>
-  </div>
-</div>`;
+</div>
+`;
   cc.innerHTML += cch;
 });
+
+});
+
 
 console.log(myParam);
 firebase.auth().onAuthStateChanged( user => {
   list.innerHTML='';
+  if(user.uid==myParam)
+  {
+
+    cc.innerHTML=`<div ><button id="setting_yes" onclick = "sans()">setting</button></div>`+cc.innerHTML;
+    document.querySelector('#setting_yes').onclick=sans;
+
+  }
+  var count=0;
   db.collection('shop/'+myParam+'/product').get().then((snapshot) => {
+    var len=Object.keys(snapshot.docs).length
     snapshot.docs.forEach(doc => {
         var ui=firebase.auth().currentUser,user_id;
         if(!ui)
@@ -43,7 +129,8 @@ firebase.auth().onAuthStateChanged( user => {
         {
             user_id=ui.uid;
         }
-        dispProduct(doc.data(),doc.id,user_id);
+        count+=1;
+        dispProduct(doc.data(),doc.id,user_id,count,len);
     })
 });
   if (user) {
@@ -54,11 +141,12 @@ firebase.auth().onAuthStateChanged( user => {
   }
 });
 
-function dispProduct(product,idpro,user)
+function dispProduct(product,idpro,user,count,final)
 {
   let html;
   console.log(myParam,user);
   if (myParam == user){
+
     html=`
     <div class="lg:w-1/4 md:w-1/2 p-4 w-full block-${user}-${idpro}">
         <a class="block relative h-48 rounded overflow-hidden">
@@ -99,6 +187,8 @@ function dispProduct(product,idpro,user)
   }
 
 	list.innerHTML +=html;
+
+
 
 
 	document.querySelectorAll('.edit_yes').forEach((x)=>{
@@ -232,7 +322,7 @@ function dispProduct(product,idpro,user)
     window.localStorage.setItem(myParam,JSON.stringify(cart));
 
     })
-}
+    }
 
 
 

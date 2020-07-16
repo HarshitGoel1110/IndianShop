@@ -21,7 +21,7 @@ db.collection('shop/'+ firebase.auth().currentUser.uid +'/purchased').orderBy('t
               <div class="md:flex-grow">
                 <h2 class="text-2xl font-medium text-gray-900 title-font mb-2"><strong>Customer Name -</strong> ${doc1.data().name}</h2>
                 <p class="leading-relaxed"><strong>Delivery Address -</strong>${deliverery_address}</p>
-                <p class="leading-relaxed"><strong>Customer Phone No.</strong> ${doc1.data().mobileno}</p>
+                <p class="leading-relaxed"><strong>Customer Phone No.</strong> ${doc1.data().mobile}</p>
                 <br>
                 <p>Click to view the bill</p>
                 <br>
@@ -106,7 +106,10 @@ db.collection('shop/'+ firebase.auth().currentUser.uid +'/purchased').orderBy('t
 
                                     var html=document.querySelector('#remove-'+id1).innerHTML;
                                     qw1.innerHTML=html+qw1.innerHTML;
-                                    document.querySelector(".button-"+id1).innerHTML='';
+                                    document.querySelectorAll(".button-"+id1).forEach((it)=>{
+                                    it.innerHTML='';
+                                    })
+                                    
                                     document.querySelector('#remove-'+id1).innerHTML="";
                                 })
                             })

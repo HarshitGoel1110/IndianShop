@@ -9,7 +9,7 @@ function setItem1(id)
 const addShop=(store,doc)=>{
 
 	let html=`
-    <div class="p-4 md:w-1/3 shop-card">
+    <div class="p-4 md:w-1/3 shop-card relative overflow-hidden w-full">
     <div class="h-full border-2 border-gray-200 rounded-lg overflow-hidden">
       <canvas class="lg:h-48 md:h-36 w-full object-cover object-center image-shop"   width="400" height="200" name="${store.name}" alt="blog" ></canvas>
       <div class="p-6">
